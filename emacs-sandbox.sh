@@ -28,9 +28,7 @@
 
 # * Constants
 
-# ECG: added home for emacs
-
-EMACSHOME="/home/viking/bin/emacs-playpen/bin/"
+EMACSHOME="${HOME}/emacs-playpen/bin/"
 
 package_archives_args=(
     --eval "(add-to-list 'package-archives '(\"gnu\" . \"https://elpa.gnu.org/packages/\") t)"
