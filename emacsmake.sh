@@ -7,13 +7,13 @@
 
 # Modifiable parameters
 # You WILL want to fiddle with these if you don't want the args I chose
-CONFIGPARAMS="--prefix=${EMACSHOME}"
 COMPILEHOME="${HOME}/src/c/emacs"
 # This gets used to run emacs-sandbox.sh with custom directory
 EMACSCONFHOME="${HOME}/.emacs-playpen"
 
 # We might need to rejigger this from args, which will screw with runMe and helpMe
 EMACSHOME="${HOME}/bin/emacs-playpen"
+CONFIGPARAMS="--prefix=${EMACSHOME}"
 
 # Help function, usage()
 helpMe() {
@@ -98,9 +98,8 @@ execMe() {
 #    each arg read, sets val, then 
 
 # First, let user know about emacs-sandbox.sh if they don't already have it
-local SANDBOX_LOCATION
 SANDBOX_LOCATION=$(type -p emacs-sandbox.sh)
-if [[ -z "${SANDBBOX_LOCATION}" ]]; then
+if [[ -z "${SANDBOX_LOCATION}" ]]; then
     echo "You do not have emacs-sandbox.sh, you should probably grab this"
     echo "so you can run emacs from a sandboxed location"
     echo "Continuing anyhow"
