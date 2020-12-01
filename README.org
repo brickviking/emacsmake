@@ -1,0 +1,3 @@
+* Make script for emacs compilation
+This is a very simple wrapper script to distclean, make, install and execute emacs
+This will also need my version of emacs-sandbox.sh if you wish to run the compiled emacs
