@@ -28,6 +28,7 @@ helpMe() {
     echo "   -m    compile (no install)"
     echo "   -i    install to ${EMACSHOME}"
     echo "   -r    execute from ${EMACSHOME}"
+    echo "   -u    uninstall from ${EMACSHOME}"
 }
 
 # Runs make distclean, but only if the configure step had created one.
@@ -78,6 +79,12 @@ runMe() {
     popd
 }
 
+# Uninstall from $EMACSHOME
+uninstallMe() {
+    # Only requirements are that I've installed
+    make uninstall
+}
+
 # Do everything
 execMe() {
     cleanMe
@@ -90,7 +97,7 @@ execMe() {
 # main()
 
 # Need a getopts-style processor here, or I could simply roll my own. Quicker to roll.
-# args=$(getopt -n "$0" -o cde:hmir -l emacs:,help,config,make,install,run -- "$@") || { usage; exit 1; }
+# args=$(getopt -n "$0" -o cde:hmiru -l emacs:,help,config,make,install,run,uninstall -- "$@") || { usage; exit 1; }
 
 # eval set -- "$args"
 # The while true won't work, as we need to run steps in order, not in the order the args are processed.
@@ -124,6 +131,8 @@ elif [[ -n $1 ]]; then
 	      installMe ;;
         "-r") pushd "${EMACSHOME}"
 	      runMe ;;
+	"-u") pushd "${COMPILEHOME}"
+	      uninstallMe ;;
         *) helpMe ;;
     esac
 popd # FIXME: reverse whatever pushd we did, errors when helpMe called
