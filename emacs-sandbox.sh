@@ -2,7 +2,8 @@
 
 # * emacs-sandbox.sh --- Run Emacs in a sandbox
 
-# URL: https://github.com/alphapapa/emacs-sandbox.sh
+# Original URL: https://github.com/alphapapa/emacs-sandbox.sh
+# Current  URL: https://github.com/brickviking/emacsmake/blob/master/emacs-sandbox.sh
 # Version: 0.1-pre
 # Version: 0.1a-pre
 
