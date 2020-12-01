@@ -1,11 +1,16 @@
 #!/bin/bash
 #
 # v0.1 Initial cut, should be mostly complete
+# v0.2 Changes to account for mistakes I made
+# TODO: rework for versions of emacs earlier than 28.0.50, as there's no makefile until the
+#       configure phase
 
-EMACSCONFHOME="${HOME}/.emacs-playpen"
+# Modifiable parameters
 # You WILL want to fiddle with these if you don't want the args I chose
-CONFIGPARAMS="--with-imagemagick --with-xwidgets --prefix=${EMACSHOME}"
-COMPILEHOME="${HOME}/src/emacs"
+CONFIGPARAMS="--prefix=${EMACSHOME}"
+COMPILEHOME="${HOME}/src/c/emacs"
+# This gets used to run emacs-sandbox.sh with custom directory
+EMACSCONFHOME="${HOME}/.emacs-playpen"
 
 # We might need to rejigger this from args, which will screw with runMe and helpMe
 EMACSHOME="${HOME}/bin/emacs-playpen"
@@ -16,8 +21,8 @@ helpMe() {
     echo "   -h    help (this text)"
     echo "   -d    distclean (no compile)"
     # This could be rolled into -r
-    # echo "   -e    set emacs binary home for running"
-    # echo "         default location is ${EMACSHOME}"
+    echo "   -e    run every step"
+    echo "         default emacs binary location is ${EMACSHOME}"
     echo "   -c    run configure with params"
     echo "      params are: ${CONFIGPARAMS}"
     echo "   -m    compile (no install)"
@@ -25,37 +30,47 @@ helpMe() {
     echo "   -r    execute from ${EMACSHOME}"
 }
 
-# Runs make distclean
+# Runs make distclean, but only if the configure step had created one.
+# TODO: no chance to break out of this, perhaps we should offer that
 cleanMe() {
-    echo "This will REMOVE all compiled files including makefiles"
-    make distclean
+    if [[ -f Makefile ]]; then
+	echo "This will REMOVE all compiled files including makefiles"
+	make distclean
+    else
+	echo "Makefile not found, skipping"
+    fi
 }
 
 # Runs configure phase
 configMe() {
-    ./configure ${CONFIGPARAMS}
+    ./configure "${CONFIGPARAMS}"
 }
 
 # Runs make (hopefully we ran configure first)
 makeMe() {
-    make
+    if [[ -f Makefile ]]; then
+	make
+    else
+	echo "No Makefile found, perhaps run with -c first?"
+    fi
 }
 
 # Runs the install phase (currently don't need sudo, but would have normally done)
 installMe() {
     # echo "This will require you to enter in your password" # only needed for system dirs
     # sudo make install
+    # TODO: should check that there's a emacs binary first, but I don't know where that will be
     make install
 }
 
 # Assuming everything else is done, runs compiled emacs from install
 runMe() {
-    pushd ${EMACSHOME}
+    pushd "${EMACSHOME}"
     # Stick up a buffer with relevant instructions to run in *scratch*
     # vim notepad.txt  # currently handled by my emacs-28.0.50 client
     # TODO: We should probably capture whether emacs runs or dies
     RETVAL=$( emacs-sandbox.sh -d "${EMACSCONFHOME}" -i quelpa-use-package )
-    if [[ ${RETVAL} != 0 ]]; then
+    if [[ "${RETVAL}" != 0 ]]; then
         echo "Completed with ${RETVAL}"
     else
         echo "Completed with success"
@@ -81,7 +96,16 @@ execMe() {
 # The while true won't work, as we need to run steps in order, not in the order the args are processed.
 # TODO: we could handle multiple x/y/z in order, like this:
 #    each arg read, sets val, then 
-# First, change to home of compile, as most args address this
+
+# First, let user know about emacs-sandbox.sh if they don't already have it
+local SANDBOX_LOCATION
+SANDBOX_LOCATION=$(type -p emacs-sandbox.sh)
+if [[ -z "${SANDBBOX_LOCATION}" ]]; then
+    echo "You do not have emacs-sandbox.sh, you should probably grab this"
+    echo "so you can run emacs from a sandboxed location"
+    echo "Continuing anyhow"
+fi
+unset SANDBOX_LOCATION
 
 if [[ -n $2 ]]; then
     echo "$0: Too many arguments, we only need one of the following"
@@ -89,21 +113,21 @@ if [[ -n $2 ]]; then
 elif [[ -n $1 ]]; then
     case $1 in 
         "-h"|"--help"|"-?") helpMe ;;
-        "-d") pushd ${COMPILEHOME}
+        "-d") pushd "${COMPILEHOME}"
 	      cleanMe ;;
-        "-e") pushd ${COMPILEHOME}
+        "-e") pushd "${COMPILEHOME}" # Eventually changes to ${EMACSHOME}
 	      execMe ;;
-        "-c") pushd ${COMPILEHOME}
+        "-c") pushd "${COMPILEHOME}"
 	      configMe ;;
-        "-m") pushd ${COMPILEHOME}
+        "-m") pushd "${COMPILEHOME}"
 	      makeMe ;;
-        "-i") pushd ${COMPILEHOME}
+        "-i") pushd "${COMPILEHOME}"
 	      installMe ;;
-        "-r") pushd ${EMACSHOME}
+        "-r") pushd "${EMACSHOME}"
 	      runMe ;;
         *) helpMe ;;
     esac
-popd # reverse whatever pushd we did
+popd # FIXME: reverse whatever pushd we did, errors when helpMe called
 else # We don't have $1
     helpMe
 fi
