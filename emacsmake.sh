@@ -19,16 +19,14 @@ CONFIGPARAMS="--prefix=${EMACSHOME}"
 helpMe() {
     echo "$0: emacs recompiler script"
     echo "   -h    help (this text)"
-    echo "   -d    distclean (no compile)"
-    # This could be rolled into -r
+    echo "   -d    distclean (no compile). Runs make distclean"
     echo "   -e    run every step"
     echo "         default emacs binary location is ${EMACSHOME}"
-    echo "   -c    run configure with params"
-    echo "      params are: ${CONFIGPARAMS}"
-    echo "   -m    compile (no install)"
-    echo "   -i    install to ${EMACSHOME}"
-    echo "   -r    execute from ${EMACSHOME}"
-    echo "   -u    uninstall from ${EMACSHOME}"
+    echo "   -c    run ./configure with params ${CONFIGPARAMS}"
+    echo "   -m    compile (no install), runs make"
+    echo "   -i    install to ${EMACSHOME}, runs make install"
+    echo "   -r    execute from ${EMACSHOME}, runs  emacs-sandbox.sh -d "${EMACSCONFHOME}" -i quelpa-use-package "
+    echo "   -u    uninstall from ${EMACSHOME}, runs make uninstall"
 }
 
 # Runs make distclean, but only if the configure step had created one.
