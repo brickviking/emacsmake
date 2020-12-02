@@ -13,7 +13,10 @@ EMACSCONFHOME="${HOME}/.emacs-playpen"
 
 # We might need to rejigger this from args, which will screw with runMe and helpMe
 EMACSHOME="${HOME}/bin/emacs-playpen"
-CONFIGPARAMS=( "--with-imagemagick" "--with-xwidgets" "--prefix=${EMACSHOME}" )
+CONFIGPARAMS=(
+"--with-cairo"
+"--with-xwidgets"
+"--prefix=${EMACSHOME}" )
 
 # Help function, usage()
 helpMe() {
