@@ -13,7 +13,7 @@ EMACSCONFHOME="${HOME}/.emacs-playpen"
 
 # We might need to rejigger this from args, which will screw with runMe and helpMe
 EMACSHOME="${HOME}/bin/emacs-playpen"
-CONFIGPARAMS="--prefix=${EMACSHOME}"
+CONFIGPARAMS=( "--with-imagemagick" "--with-xwidgets" "--prefix=${EMACSHOME}" )
 
 # Help function, usage()
 helpMe() {
@@ -22,7 +22,7 @@ helpMe() {
     echo "   -d    distclean (no compile). Runs make distclean"
     echo "   -e    run every step"
     echo "         default emacs binary location is ${EMACSHOME}"
-    echo "   -c    run ./configure with params ${CONFIGPARAMS}"
+    echo "   -c    run ./configure with params ${CONFIGPARAMS[@]}"
     echo "   -m    compile (no install), runs make"
     echo "   -i    install to ${EMACSHOME}, runs make install"
     echo "   -r    execute from ${EMACSHOME}, runs  emacs-sandbox.sh -d "${EMACSCONFHOME}" -i quelpa-use-package "
@@ -42,7 +42,7 @@ cleanMe() {
 
 # Runs configure phase
 configMe() {
-    ./configure "${CONFIGPARAMS}"
+    ./configure "${CONFIGPARAMS[@]}"
 }
 
 # Runs make (hopefully we ran configure first)
