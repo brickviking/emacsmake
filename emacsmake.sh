@@ -90,8 +90,12 @@ runMe() {
 
 # Uninstall from $EMACSHOME
 uninstallMe() {
-    # Only requirements are that I've installed
-    make uninstall
+    # Only requirements are that I've installed emacs at EMACSHOME
+    if [[ -f "${EMACSHOME}/bin/emacs" ]]; then
+	make uninstall
+    else
+	echo "Are you sure you installed emacs to ${EMACSHOME}?"
+    fi
 }
 
 # Do everything
