@@ -10,7 +10,9 @@
 COMPILEHOME="${HOME}/src/c/emacs"
 # This gets used to run emacs-sandbox.sh with custom directory
 EMACSCONFHOME="${HOME}/.emacs-playpen"
-
+EMACSRUNARGS=(
+    "-d"
+    "${EMACSCONFHOME}" )
 # We might need to rejigger this from args, which will screw with runMe and helpMe
 EMACSHOME="${HOME}/bin/emacs-playpen"
 CONFIGPARAMS=(
@@ -72,7 +74,7 @@ runMe() {
     # Stick up a buffer with relevant instructions to run in *scratch*
     # vim notepad.txt  # currently handled by my emacs-28.0.50 client
     # TODO: We should probably capture whether emacs runs or dies
-    RETVAL=$( emacs-sandbox.sh -d "${EMACSCONFHOME}" -i quelpa-use-package )
+    RETVAL=$( emacs-sandbox.sh "${EMACSRUNARGS[@]}" )
     if [[ "${RETVAL}" != 0 ]]; then
         echo "Completed with ${RETVAL}"
     else
