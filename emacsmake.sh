@@ -2,24 +2,29 @@
 #
 # v0.1 Initial cut, should be mostly complete
 # v0.2 Changes to account for mistakes I made
+# v0.3 rework of environment variables
 # TODO: rework for versions of emacs earlier than 28.0.50, as there's no makefile until the
 #       configure phase
 
+#######################
 # Modifiable parameters
 # You WILL want to fiddle with these if you don't want the args I chose
 COMPILEHOME="${HOME}/src/c/emacs"
-# This gets used to run emacs-sandbox.sh with custom directory
-EMACSCONFHOME="${HOME}/.emacs-playpen"
-EMACSRUNARGS=(
-    "-d"
-    "${EMACSCONFHOME}" )
-# We might need to rejigger this from args, which will screw with runMe and helpMe
+# Place to put emacs (root of tree)
 EMACSHOME="${HOME}/bin/emacs-playpen"
 CONFIGPARAMS=(
     "--with-imagemagick"
     "--with-cairo"
     "--with-xwidgets"
     "--prefix=${EMACSHOME}" )
+# This gets used to run emacs-sandbox.sh with custom directory
+EMACSCONFHOME="${HOME}/.emacs-playpen"
+EMACSRUNARGS=(
+    "-d"
+    "${EMACSCONFHOME}" )
+
+###########
+# Functions
 
 # Help function, usage()
 helpMe() {
@@ -98,6 +103,7 @@ execMe() {
     runMe
 }
 
+########
 # main()
 
 # Need a getopts-style processor here, or I could simply roll my own. Quicker to roll.
