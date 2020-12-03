@@ -76,9 +76,6 @@ installMe() {
 # Assuming everything else is done, runs compiled emacs from install
 runMe() {
     pushd "${EMACSHOME}"
-    # Stick up a buffer with relevant instructions to run in *scratch*
-    # vim notepad.txt  # currently handled by my emacs-28.0.50 client
-    # TODO: We should probably capture whether emacs runs or dies
     RETVAL=$( emacs-sandbox.sh "${EMACSRUNARGS[@]}" )
     if [[ "${RETVAL}" != 0 ]]; then
         echo "Completed with ${RETVAL}"
