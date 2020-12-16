@@ -3,8 +3,9 @@
 # v0.1 Initial cut, should be mostly complete
 # v0.2 Changes to account for mistakes I made
 # v0.3 rework of environment variables
+# v0.4 Addition of maintainerclean
 # TODO: rework for versions of emacs earlier than 28.0.50, as there's no makefile until the
-#       configure phase
+#       configure phase. Still doesn't work for much earlier than 23 - 18.59 has no configure.
 
 #######################
 # Modifiable parameters
@@ -30,8 +31,9 @@ EMACSRUNARGS=(
 helpMe() {
     echo "$0: emacs recompiler script"
     echo "   -h    help (this text)"
-    echo "   -d    distclean (no compile). Runs make distclean"
-    echo "   -e    run every step"
+    echo "   -d    Runs 'make distclean'"
+    echo "   -D    Runs 'make maintainer-clean'"
+    echo "   -e    run every step; distclean, configure, make, install,run"
     echo "         default emacs binary location is ${EMACSHOME}"
     echo "   -c    run ./configure with params ${CONFIGPARAMS[@]}"
     echo "   -m    compile (no install), runs make"
@@ -51,6 +53,15 @@ cleanMe() {
     fi
 }
 
+cleanMeGood() {
+    if [[ -f Makefile ]]; then
+	echo "This will REMOVE all compiled files including makefiles"
+	make maintainer-clean
+    else
+	echo "Makefile not found, skipping"
+    fi
+}
+
 # Runs configure phase
 configMe() {
     ./configure "${CONFIGPARAMS[@]}"
@@ -59,7 +70,7 @@ configMe() {
 # Runs make (hopefully we ran configure first)
 makeMe() {
     if [[ -f Makefile ]]; then
-	make
+	make bootstrap # because we want stale .elc files regenned
     else
 	echo "No Makefile found, perhaps run with -c first?"
     fi
@@ -88,6 +99,7 @@ runMe() {
 # Uninstall from $EMACSHOME
 uninstallMe() {
     # Only requirements are that I've installed emacs at EMACSHOME
+    # and NOT reconfigured emacs since
     if [[ -f "${EMACSHOME}/bin/emacs" ]]; then
 	make uninstall
     else
@@ -108,7 +120,7 @@ execMe() {
 # main()
 
 # Need a getopts-style processor here, or I could simply roll my own. Quicker to roll.
-# args=$(getopt -n "$0" -o cde:hmiru -l emacs:,help,config,make,install,run,uninstall -- "$@") || { usage; exit 1; }
+# args=$(getopt -n "$0" -o cdDe:hmiru -l emacs:,config,distclean,maintainerclean,help,make,install,run,uninstall -- "$@") || { usage; exit 1; }
 
 # eval set -- "$args"
 # The while true won't work, as we need to run steps in order, not in the order the args are processed.
@@ -132,6 +144,8 @@ elif [[ -n $1 ]]; then
         "-h"|"--help"|"-?") helpMe ;;
         "-d") pushd "${COMPILEHOME}"
 	      cleanMe ;;
+	"-D") pushd "${COMPILEHOME}"
+	    cleanMeGood ;;
         "-e") pushd "${COMPILEHOME}" # Eventually changes to ${EMACSHOME}
 	      execMe ;;
         "-c") pushd "${COMPILEHOME}"
