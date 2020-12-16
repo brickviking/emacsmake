@@ -3,7 +3,8 @@
 # v0.1 Initial cut, should be mostly complete
 # v0.2 Changes to account for mistakes I made
 # v0.3 rework of environment variables
-# v0.4 Addition of maintainerclean
+# v0.4 added distclean, maintainerclean, and run everything
+#
 # TODO: rework for versions of emacs earlier than 28.0.50, as there's no makefile until the
 #       configure phase. Still doesn't work for much earlier than 23 - 18.59 has no configure.
 
