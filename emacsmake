@@ -13,13 +13,14 @@
 # You WILL want to fiddle with these if you don't want the args I chose
 COMPILEHOME="${HOME}/src/c/emacs"
 # Place to put emacs (root of tree)
-EMACSHOME="${HOME}/bin/emacs-playpen"
+# EMACSHOME="${HOME}/bin/emacs-playpen"
+EMACSHOME="/usr/local/"
 CONFIGPARAMS=(
     "--with-imagemagick"
     "--with-cairo"
     "--with-xwidgets"
     "--prefix=${EMACSHOME}" )
-# This gets used to run emacs-sandbox.sh with custom directory
+# This gets used to run with-emacs.sh with custom directory
 EMACSCONFHOME="${HOME}/.emacs-playpen"
 EMACSRUNARGS=(
     "-d"
@@ -39,7 +40,7 @@ helpMe() {
     echo "   -c    run ./configure with params ${CONFIGPARAMS[@]}"
     echo "   -m    compile (no install), runs make"
     echo "   -i    install to ${EMACSHOME}, runs make install"
-    echo "   -r    execute from ${EMACSHOME}, runs  emacs-sandbox.sh -d "${EMACSCONFHOME}" -i quelpa-use-package "
+    echo "   -r    execute from ${EMACSHOME}, runs  with-emacs.sh -d "${EMACSCONFHOME}" -i quelpa-use-package "
     echo "   -u    uninstall from ${EMACSHOME}, runs make uninstall"
 }
 
@@ -88,7 +89,7 @@ installMe() {
 # Assuming everything else is done, runs compiled emacs from install
 runMe() {
     pushd "${EMACSHOME}"
-    RETVAL=$( emacs-sandbox.sh "${EMACSRUNARGS[@]}" )
+    RETVAL=$( with-emacs.sh "${EMACSRUNARGS[@]}" )
     if [[ "${RETVAL}" != 0 ]]; then
         echo "Completed with ${RETVAL}"
     else
@@ -128,11 +129,11 @@ execMe() {
 # TODO: we could handle multiple x/y/z in order, like this:
 #    each arg read, sets val, then 
 
-# First, let user know about emacs-sandbox.sh if they don't already have it
-SANDBOX_LOCATION=$(type -p emacs-sandbox.sh)
+# First, let user know about with-emacs.sh if they don't already have it installed
+SANDBOX_LOCATION=$(type -p with-emacs.sh)
 if [[ -z "${SANDBOX_LOCATION}" ]]; then
-    echo "You do not have emacs-sandbox.sh, you should probably grab this"
-    echo "so you can run emacs from a sandboxed location"
+	echo "You do not have with-emacs.sh (check README.org), you should probably grab this"
+    echo "so you can run emacs from a sandboxed location."
     echo "Continuing anyhow"
 fi
 unset SANDBOX_LOCATION
