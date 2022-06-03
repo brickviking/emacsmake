@@ -30,9 +30,8 @@ To supply a different configuration directory to execute Emacs, adjust EMACSCONF
 with-emacs.sh.
 
 * Future directions
-At this stage, I haven't got the foggiest idea what else I need, though there's no doubt I could
-simplify this by removing the whole "execute emacs" stage, leaving that up to the with-emacs.sh
-script.
+At this stage, I haven't got the foggiest idea what else I need, though I've already simplified this by
+removing the whole "execute emacs" stage, leaving that up to the with-emacs.sh script.
 
 The usual applies to anyone who wants to report bugs, issues or even suggestions, check out the
 issues section of this project.
