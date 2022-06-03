@@ -91,6 +91,17 @@ installMe() {
     make install
 }
 
+# Uninstall from $EMACSHOME
+uninstallMe() {
+    # Only requirements are that I've installed emacs at EMACSHOME
+    # and NOT reconfigured emacs since
+    if [[ -f "${EMACSHOME}/bin/emacs" ]]; then
+	make uninstall
+    else
+	echo "Are you sure you installed emacs to ${EMACSHOME}?"
+    fi
+}
+
 # Assuming everything else is done, runs compiled emacs from install
 runMe() {
     pushd "${EMACSHOME}"
@@ -101,17 +112,6 @@ runMe() {
         echo "Completed with success"
     fi
     popd
-}
-
-# Uninstall from $EMACSHOME
-uninstallMe() {
-    # Only requirements are that I've installed emacs at EMACSHOME
-    # and NOT reconfigured emacs since
-    if [[ -f "${EMACSHOME}/bin/emacs" ]]; then
-	make uninstall
-    else
-	echo "Are you sure you installed emacs to ${EMACSHOME}?"
-    fi
 }
 
 # Do everything
@@ -126,21 +126,13 @@ execMe() {
 ########
 # main()
 
-# Need a getopts-style processor here, or I could simply roll my own. Quicker to roll.
-# args=$(getopt -n "$0" -o cdDe:hmiru -l emacs:,config,distclean,maintainerclean,help,make,install,run,uninstall -- "$@") || { usage; exit 1; }
-
-# eval set -- "$args"
-# The while true won't work, as we need to run steps in order, not in the order the args are processed.
-# TODO: we could handle multiple x/y/z in order, like this:
-#    each arg read, sets val, then 
-
 # First, let user know about with-emacs.sh if they don't already have it installed
 SANDBOX_LOCATION=$(type -p with-emacs.sh)
 if [[ -z "${SANDBOX_LOCATION}" ]]; then
     echo "You do not have with-emacs.sh (check README.org), you should probably grab this"
     echo "from the following URL: https://github.com/alphapapa/with-emacs.sh"
     echo "so you can run emacs from a sandboxed location."
-    echo "Continuing anyhow"
+    echo "Continuing anyhow."
 fi
 unset SANDBOX_LOCATION
 
@@ -174,3 +166,4 @@ else # We don't have $1
     helpMe
 fi
 
+echo "Ending... bye"
