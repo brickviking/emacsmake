@@ -12,7 +12,10 @@
 #######################
 # Modifiable parameters
 # You WILL want to fiddle with these if you don't want the args I chose
-COMPILEHOME="${HOME}/src/c/emacs"
+# This WILL break if the user running (EUID) isn't the same as the user owning the source directory
+# i.e. if there's no /root/src/c/emacs
+COMPILEHOME="${HOME}/src/c/emacs" # Should be specific, not user-relative
+COMPILEHOME="/home/viking/src/c/emacs"
 # Place to put emacs (root of tree)
 # EMACSHOME="${HOME}/bin/emacs-playpen"
 EMACSHOME="/usr/local/"
