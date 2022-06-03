@@ -59,6 +59,7 @@ cleanMe() {
     fi
 }
 
+# Same proviso as above, this command takes immediate effect
 cleanMeGood() {
     if [[ -f Makefile ]]; then
 	echo "This will REMOVE all compiled files including makefiles"
@@ -164,7 +165,8 @@ elif [[ -n $1 ]]; then
 	      runMe ;;
 	"-u") pushd "${COMPILEHOME}"
 	      uninstallMe ;;
-        *) helpMe ;;
+        *) pushd "."
+	      helpMe ;;
     esac
 popd # FIXME: reverse whatever pushd we did, errors when helpMe called
 else # We don't have $1
