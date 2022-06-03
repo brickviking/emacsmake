@@ -137,7 +137,8 @@ execMe() {
 # First, let user know about with-emacs.sh if they don't already have it installed
 SANDBOX_LOCATION=$(type -p with-emacs.sh)
 if [[ -z "${SANDBOX_LOCATION}" ]]; then
-	echo "You do not have with-emacs.sh (check README.org), you should probably grab this"
+    echo "You do not have with-emacs.sh (check README.org), you should probably grab this"
+    echo "from the following URL: https://github.com/alphapapa/with-emacs.sh"
     echo "so you can run emacs from a sandboxed location."
     echo "Continuing anyhow"
 fi
