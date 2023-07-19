@@ -5,6 +5,8 @@
 # v0.3 rework of environment variables
 # v0.4 added distclean, maintainerclean, and run everything
 # v0.5 Renamed reference from emacs-sandbox to with-emacs as upstream has renamed
+# v0.6 Finally added link to with-emacs.sh - it's about time
+
 #
 # TODO: rework for versions of emacs earlier than 28.0.50, as there's no makefile until the
 #       configure phase. Still doesn't work for much earlier than 23 - 18.59 has no configure.
@@ -39,7 +41,7 @@ helpMe() {
     echo "   -h    help (this text)"
     echo "   -d    Runs 'make distclean'"
     echo "   -D    Runs 'make maintainer-clean'"
-    echo "   -e    run every step; distclean, configure, make, install,run"
+    echo "   -e    run every step; distclean, configure, make, install, run"
     echo "         default emacs binary location is ${EMACSHOME}"
     echo "   -c    run ./configure with params ${CONFIGPARAMS[@]}"
     echo "   -m    compile (no install), runs make"
