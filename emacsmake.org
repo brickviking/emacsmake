@@ -1,0 +1,289 @@
+#+TITLE: Emacs Make script
+#+AUTHOR: brickviking
+#+EMAIL: brickviking@gmail.com
+#+PROPERTY: header-args :tangle /home/viking/src/bash/emacsmake/emacsmake
+
+* Header and Changelog
+A few notes made about things added/changed, along with a long-term target to meet for
+emacsen versions earlier than 28.0.50. Heck, 18.x (and earlier beasts) were done on far
+wimpier machines and earlier versions (13-18.58) predated the autoconf software
+suite which wasn't released until 1991.
+
+#+BEGIN_SRC bash
+#!/bin/bash
+#
+# v0.1 Initial cut, should be mostly complete
+# v0.2 Changes to account for mistakes I made
+# v0.3 rework of environment variables
+# v0.4 added distclean, maintainerclean, and run everything
+# v0.5 Renamed reference from emacs-sandbox to with-emacs as upstream has renamed
+# v0.6 Finally added link to with-emacs.sh - it's about time
+
+#
+# TODO: rework for versions of emacs earlier than 28.0.50, as there's no makefile until the
+#       configure phase. Still doesn't work for much earlier than 23 - 18.59 has no configure.
+#+END_SRC
+
+* Parameters
+So far, the only thing of note here is that we need a specific directory to be explicitly mentioned
+so that calling this from sudo doesn't bork with messages such as:
+#+BEGIN_QUOTE
+/home/viking/bin/emacsmake: line 157: pushd: /root/src/c/emacs: No such file or directory
+#+END_QUOTE
+
+Anyhow, there are some other tweakable values here which make sense except perhaps the playpen, which
+ends up being my own personal settings testbed, so I don't blow away my main configuration.
+
+#+BEGIN_SRC bash
+#######################
+# Modifiable parameters
+# You WILL want to fiddle with these if you don't want the args I chose
+# This WILL break if the user running (EUID) isn't the same as the user owning the source directory
+# i.e. if there's no /root/src/c/emacs
+COMPILEHOME="${HOME}/src/c/emacs" # Should be specific, not user-relative
+COMPILEHOME="/home/viking/src/c/emacs"
+# Place to put emacs (root of tree)
+# EMACSHOME="${HOME}/bin/emacs-playpen"
+EMACSHOME="/usr/local/"
+CONFIGPARAMS=(
+    "--with-imagemagick"
+    "--with-cairo"
+    "--with-xwidgets"
+    "--prefix=${EMACSHOME}" )
+# This gets used to run with-emacs.sh with custom directory
+EMACSCONFHOME="${HOME}/.emacs-playpen"
+EMACSRUNARGS=(
+    "-d"
+    "${EMACSCONFHOME}" )
+#+END_SRC
+
+* Functions
+** Help function
+The boilerplate help just in case I forgot what switches I coded. Uses UNIX syntax (-x) not Microsoft (/x).
+
+#+BEGIN_SRC bash
+###########
+# Functions
+
+# Help function, usage()
+helpMe() {
+    echo "$0: emacs recompiler script"
+    echo "   -h    help (this text)"
+    echo "   -d    Runs 'make distclean'"
+    echo "   -D    Runs 'make maintainer-clean'"
+    echo "   -e    run every step; distclean, configure, make, install, run"
+    echo "         default emacs binary location is ${EMACSHOME}"
+    echo "   -c    run ./configure with params ${CONFIGPARAMS[@]}"
+    echo "   -m    compile (no install), runs make"
+    echo "   -i    install to ${EMACSHOME}, runs make install"
+    echo "   -r    execute from ${EMACSHOME}, runs  with-emacs.sh -d "${EMACSCONFHOME}" -i quelpa-use-package "
+    echo "   -u    uninstall from ${EMACSHOME}, runs make uninstall"
+}
+#+END_SRC
+
+** Cleaning scripts distclean/maintainer-clean
+Distclean basically removes almost everything that didn't come with the source code,
+and maintainer-clean removes everything that was generated, leaving only the original code.
+I'm not sure about the distinction, though I used to know. One point I've noted is that
+neither command is gatekeepered, i.e. they both take immediate effect without the ability
+to back out.
+
+#+BEGIN_SRC bash
+# Runs make distclean, but only if the configure step had created one.
+# TODO: no chance to break out of this, perhaps we should offer that
+cleanMe() {
+    if [[ -f Makefile ]]; then
+	echo "This will REMOVE all compiled files including makefiles"
+	make distclean
+    else
+	echo "Makefile not found, skipping"
+    fi
+}
+
+# Same proviso as above, this command takes immediate effect
+cleanMeGood() {
+    if [[ -f Makefile ]]; then
+	echo "This will REMOVE all compiled files including makefiles"
+	make maintainer-clean
+    else
+	echo "Makefile not found, skipping"
+    fi
+}
+#+END_SRC
+
+** Configure emacs for compilation
+Pretty obvious what this does, though it does presume we're in the correct directory,
+which we should be by the time we get here. Heck, if we weren't, something went badly
+wrong.
+
+I learned to specify the location of the configure directly, so I don't accidentally
+pick up on a preinstalled configure somewhere in the ${PATH}.
+
+#+BEGIN_SRC bash
+# Runs configure phase
+configMe() {
+    ./configure "${CONFIGPARAMS[@]}"
+}
+#+END_SRC
+
+** Make command
+Only note here is that we force a full recompile so we don't accidentally install stale
+.elc files from previous compiles.
+
+#+BEGIN_SRC bash
+# Runs make (hopefully we ran configure first)
+makeMe() {
+    if [[ -f Makefile ]]; then
+	make bootstrap # because we want stale .elc files regenned
+    else
+	echo "No Makefile found, perhaps run with -c first?"
+    fi
+}
+#+END_SRC
+
+** Install/uninstall
+This should by rights require the user to use sudo for this phase, but I have no clue
+as to what's on a target machine for sudo permissions, if the user even has sudo rights.
+Otherwise, it's a stock standard install-emacs-to-target-directory at ${EMACSHOME}
+specified earlier in the PARAMS section.
+
+#+BEGIN_SRC bash
+# Runs the install phase (currently don't need sudo, but would have normally done)
+installMe() {
+    # echo "This will require you to enter in your password" # only needed for system dirs
+    # sudo make install
+    # TODO: should check that there's a emacs binary first, but I don't know where that will be
+    make install
+}
+
+# Uninstall from $EMACSHOME
+uninstallMe() {
+    # Only requirements are that I've installed emacs at EMACSHOME
+    # and NOT reconfigured emacs since
+    if [[ -f "${EMACSHOME}/bin/emacs" ]]; then
+	make uninstall
+    else
+	echo "Are you sure you installed emacs to ${EMACSHOME}?"
+    fi
+}
+
+#+END_SRC
+
+** Running
+This runs the just-installed emacs from a config in sandbox, so I don't hose the main config.
+It does depend on an ancillary script called with-emacs.sh, which came from another place.
+It's not mandatory to have this script for anything other than running emacs with the config.
+I just hope I made a note of where to get it from, if I don't have it here on the local machine.
+
+#+BEGIN_SRC bash
+# Assuming everything else is done, runs compiled emacs from install
+runMe() {
+    pushd "${EMACSHOME}"
+    RETVAL=$( with-emacs.sh "${EMACSRUNARGS[@]}" )
+    if [[ "${RETVAL}" != 0 ]]; then
+        echo "Completed with ${RETVAL}"
+    else
+        echo "Completed with success"
+    fi
+    popd
+}
+#+END_SRC
+
+** Do-everything section
+Just string them all together in a sequence. I've made no attempt to support multiple stages, and
+have explicitly disallowed this by only allowing one arg down further in main().
+
+#+BEGIN_SRC bash
+# Do everything
+execMe() {
+    cleanMe
+    configMe
+    makeMe
+    installMe
+    runMe
+}
+
+#+END_SRC
+
+* Main
+This handles the arg matching, checks if we have a with-emacs.sh, and notifies us if we don't.
+It's assumed we know where to get this from if we don't have it, perhaps an incorrect assumption.
+p.s. it's available from github at the following link (assuming he didn't remove it):
+https://github.com/alphapapa/with-emacs.sh
+
+We explicitly disallow multiple stages from being run, as we need to process things in a certain
+order and it's too complex for me to track what stages I've set, especially if I try doing install
+folllowed by uninstall, we'd have to reorder this so the uninstall was done first even if we
+specified it last.
+
+I've also not made any attempt at using getopts, as I feel it's simply quicker to roll my own.
+However, I could have used short/long switches like the following:
+
+#+BEGIN_QUOTE bash
+# Need a getopts-style processor here, or I could simply roll my own. Quicker to roll.
+# args=$(getopt -n "$0" -o cdDe:hmiru -l emacs:,config,distclean,maintainerclean,help,make,install,run,uninstall -- "$@") || { usage; exit 1; }
+
+# eval set -- "$args"
+# The while true won't work, as we need to run steps in order, not in the order the args are processed.
+# TODO: we could handle multiple x/y/z in order, like this:
+#    each arg read, sets val, then 
+#+END_QUOTE
+
+The -e:/--emacs: switch was the precursor for the "run emacs from this location instead" function
+from with-emacs.sh, but as the script does stuff better than I would have done, I left that up to
+the secondary script. It's not written by me, and the style is quite different - presumably someone
+who knows what they're doing.
+
+#+BEGIN_SRC bash
+########
+# main()
+
+# First, let user know about with-emacs.sh if they don't already have it installed
+SANDBOX_LOCATION=$(type -p with-emacs.sh)
+if [[ -z "${SANDBOX_LOCATION}" ]]; then
+    echo "You do not have with-emacs.sh (check README.org), you should probably grab this"
+    echo "from the following URL: https://github.com/alphapapa/with-emacs.sh"
+    echo "so you can run emacs from a sandboxed location."
+    echo "Continuing anyhow."
+fi
+unset SANDBOX_LOCATION
+
+if [[ -n $2 ]]; then
+    echo "$0: Too many arguments, we only need one of the following"
+    helpMe
+elif [[ -n $1 ]]; then
+    case $1 in 
+        "-h"|"--help"|"-?") helpMe ;;
+        "-d") pushd "${COMPILEHOME}"
+	      cleanMe ;;
+	"-D") pushd "${COMPILEHOME}"
+	    cleanMeGood ;;
+        "-e") pushd "${COMPILEHOME}" # Eventually changes to ${EMACSHOME}
+	      execMe ;;
+        "-c") pushd "${COMPILEHOME}"
+	      configMe ;;
+        "-m") pushd "${COMPILEHOME}"
+	      makeMe ;;
+        "-i") pushd "${COMPILEHOME}"
+	      installMe ;;
+        "-r") pushd "${EMACSHOME}"
+	      runMe ;;
+	"-u") pushd "${COMPILEHOME}"
+	      uninstallMe ;;
+        *) pushd "."
+	      helpMe ;;
+    esac
+popd # FIXME: reverse whatever pushd we did, errors when helpMe called
+else # We don't have $1
+    helpMe
+fi
+
+echo "Ending... bye"
+
+#+END_SRC
+
+* Conclusions
+A fairly clean script, which would have been easy enough to understand without the extra
+descriptions. There's not a lot to this one, but I felt I needed to add a little clarification
+at certain spots.
+
