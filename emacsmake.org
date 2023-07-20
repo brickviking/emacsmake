@@ -1,13 +1,59 @@
 #+TITLE: Emacs Make script
 #+AUTHOR: brickviking
 #+EMAIL: brickviking@gmail.com
-#+PROPERTY: header-args :tangle /home/viking/src/bash/emacsmake/emacsmake
+
+* Readme, in org format
+
+#+BEGIN_SRC org -i
+  :PROPERTIES:
+  :header-args: org :tangle README.org
+  :END:
+
+,* Introduction
+This is a very simple wrapper script to distclean, configure, make, install and execute Emacs.
+Changes can be made to the variables inside the script, which will help drive how Emacs can be
+compiled, installed and executed.
+
+,* Variables and requirements
+First off, you'll need the source code to Emacs, adjust =COMPILEHOME=. You can either fetch and
+extract a static tarball of the source, or you can access either of the git repositories.
+
+Because you're compiling Emacs, you can choose which libraries to compile Emacs with; adjust the
+=CONFIGPARAMS= array for this. You might want to check the output of =./configure --help= from
+within the source directory to see what parameters are supported. This will include choosing the
+place to put the compiled version of Emacs, adjust =EMACSHOME=. Note that this is the root of the
+tree where the whole of Emacs will eventually live, not the location of the Emacs binary
+itself. Usually directories will be created below this point for the libraries, the binaries and the
+compiled lisp code to live.
+
+
+,* Executing Emacs
+At the moment, this script will run emacs using the =with-emacs.sh= script, available from
+https://github.com/alphapapa/with-emacs.sh - if you wish to run the compiled Emacs from anywhere not
+already on the user's =PATH=, you will want to either add the installation directory (of the emacs
+binary): #+BEGIN_SRC: bash $ export PATH=${PATH}:${HOME}/bin/<new-location>/bin/emacs #+END_SRC as
+an example, or edit =with-emacs.sh= suitably to run the Emacs binary from a new location. Don't
+forget to install the script somewhere on your =PATH=.
+
+To supply a different configuration directory to execute Emacs, adjust EMACSCONFHOME. This will
+affect with-emacs.sh.
+
+,* Future directions
+At this stage, I haven't got the foggiest idea what else I need, though I've already simplified this
+by removing the whole "execute emacs" stage, leaving that up to the with-emacs.sh script.
+
+The usual applies to anyone who wants to report bugs, issues or even suggestions, check out the
+issues section of this project.
+
+#+END_SRC
 
 * Header and Changelog
-A few notes made about things added/changed, along with a long-term target to meet for
-emacsen versions earlier than 28.0.50. Heck, 18.x (and earlier beasts) were done on far
-wimpier machines and earlier versions (13-18.58) predated the autoconf software
-suite which wasn't released until 1991.
+    :PROPERTIES:
+    :header-args: bash :tangle /home/viking/src/bash/emacsmake/emacsmake
+    :END:
+A few notes made about things added/changed, along with a long-term target to meet for emacsen
+versions earlier than 28.0.50. Heck, 18.x (and earlier beasts) were done on far wimpier machines and
+earlier versions (13-18.58) predated the autoconf software suite which wasn't released until 1991.
 
 #+BEGIN_SRC bash
 #!/bin/bash
@@ -25,14 +71,18 @@ suite which wasn't released until 1991.
 #+END_SRC
 
 * Parameters
+    :PROPERTIES:
+    :header-args: bash :tangle /home/viking/src/bash/emacsmake/emacsmake
+    :END:
+
 So far, the only thing of note here is that we need a specific directory to be explicitly mentioned
 so that calling this from sudo doesn't bork with messages such as:
 #+BEGIN_QUOTE
 /home/viking/bin/emacsmake: line 157: pushd: /root/src/c/emacs: No such file or directory
 #+END_QUOTE
 
-Anyhow, there are some other tweakable values here which make sense except perhaps the playpen, which
-ends up being my own personal settings testbed, so I don't blow away my main configuration.
+Anyhow, there are some other tweakable values here which make sense except perhaps the playpen,
+which ends up being my own personal settings testbed, so I don't blow away my main configuration.
 
 #+BEGIN_SRC bash
 #######################
@@ -59,6 +109,10 @@ EMACSRUNARGS=(
 
 * Functions
 ** Help function
+    :PROPERTIES:
+    :header-args: bash :tangle /home/viking/src/bash/emacsmake/emacsmake
+    :END:
+
 The boilerplate help just in case I forgot what switches I coded. Uses UNIX syntax (-x) not Microsoft (/x).
 
 #+BEGIN_SRC bash
@@ -82,6 +136,10 @@ helpMe() {
 #+END_SRC
 
 ** Cleaning scripts distclean/maintainer-clean
+    :PROPERTIES:
+    :header-args: bash :tangle /home/viking/src/bash/emacsmake/emacsmake
+    :END:
+
 Distclean basically removes almost everything that didn't come with the source code,
 and maintainer-clean removes everything that was generated, leaving only the original code.
 I'm not sure about the distinction, though I used to know. One point I've noted is that
@@ -112,7 +170,11 @@ cleanMeGood() {
 #+END_SRC
 
 ** Configure emacs for compilation
-Pretty obvious what this does, though it does presume we're in the correct directory,
+    :PROPERTIES:
+    :header-args: bash :tangle /home/viking/src/bash/emacsmake/emacsmake
+    :END:
+
+It's pretty obvious what this does, though it does presume we're in the correct directory,
 which we should be by the time we get here. Heck, if we weren't, something went badly
 wrong.
 
@@ -127,7 +189,11 @@ configMe() {
 #+END_SRC
 
 ** Make command
-Only note here is that we force a full recompile so we don't accidentally install stale
+    :PROPERTIES:
+    :header-args: bash :tangle /home/viking/src/bash/emacsmake/emacsmake
+    :END:
+
+The only note here is that we force a full recompile so we don't accidentally install stale
 .elc files from previous compiles.
 
 #+BEGIN_SRC bash
@@ -142,6 +208,10 @@ makeMe() {
 #+END_SRC
 
 ** Install/uninstall
+    :PROPERTIES:
+    :header-args: bash :tangle /home/viking/src/bash/emacsmake/emacsmake
+    :END:
+
 This should by rights require the user to use sudo for this phase, but I have no clue
 as to what's on a target machine for sudo permissions, if the user even has sudo rights.
 Otherwise, it's a stock standard install-emacs-to-target-directory at ${EMACSHOME}
@@ -170,6 +240,10 @@ uninstallMe() {
 #+END_SRC
 
 ** Running
+    :PROPERTIES:
+    :header-args: bash :tangle /home/viking/src/bash/emacsmake/emacsmake
+    :END:
+
 This runs the just-installed emacs from a config in sandbox, so I don't hose the main config.
 It does depend on an ancillary script called with-emacs.sh, which came from another place.
 It's not mandatory to have this script for anything other than running emacs with the config.
@@ -190,6 +264,10 @@ runMe() {
 #+END_SRC
 
 ** Do-everything section
+    :PROPERTIES:
+    :header-args: bash :tangle /home/viking/src/bash/emacsmake/emacsmake
+    :END:
+
 Just string them all together in a sequence. I've made no attempt to support multiple stages, and
 have explicitly disallowed this by only allowing one arg down further in main().
 
@@ -206,6 +284,10 @@ execMe() {
 #+END_SRC
 
 * Main
+    :PROPERTIES:
+    :header-args: bash :tangle /home/viking/src/bash/emacsmake/emacsmake
+    :END:
+
 This handles the arg matching, checks if we have a with-emacs.sh, and notifies us if we don't.
 It's assumed we know where to get this from if we don't have it, perhaps an incorrect assumption.
 p.s. it's available from github at the following link (assuming he didn't remove it):
