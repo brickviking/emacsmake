@@ -1,38 +1,36 @@
 * Introduction
-This is a very simple wrapper script to distclean, configure, make, install and execute Emacs. 
-Changes can be made to the variables inside the script, which will help drive how Emacs can
-be compiled, installed and executed.
+This is a very simple wrapper script to distclean, configure, make, install and execute Emacs.
+Changes can be made to the variables inside the script, which will help drive how Emacs can be
+compiled, installed and executed.
 
 * Variables and requirements
-First off, you'll need the source code to Emacs, adjust =COMPILEHOME=. You can either fetch and extract
-a static tarball of the source, or you can access either of the git repositories.
+First off, you'll need to install the source code to Emacs, adjust
+=COMPILEHOME=. You can either fetch and extract a static tarball of
+the source, or you can access either of the git repositories.
 
 Because you're compiling Emacs, you can choose which libraries to compile Emacs with; adjust the
-=CONFIGPARAMS= array for this. You might want to check the output of =./compile --help= to see
-what parameters are supported. This will include choosing the place to put the compiled version of Emacs,
-adjust =EMACSHOME=. Note that this is the root of the tree where the whole of Emacs will eventually live,
-not the location of the Emacs binary itself. Usually directories will be created below this point
-for the libraries, the binaries and the compiled lisp code to live.
+=CONFIGPARAMS= array for this. You might want to check the output of =./configure --help= from
+within the source directory to see what parameters are supported. This will include choosing the
+place to put the compiled version of Emacs, adjust =EMACSHOME=. Note that this is the root of the
+tree where the whole of Emacs will eventually live, not the location of the Emacs binary
+itself. Usually directories will be created below this point for the libraries, the binaries and the
+compiled lisp code to live.
 
 
 * Executing Emacs
-At the moment, this script will run emacs using the =with-emacs.sh= script, available from
-https://github.com/alphapapa/with-emacs.sh - if you wish to run the compiled Emacs from
-anywhere not already on the user's =PATH=, you will want to either add the installation directory
-(of the emacs binary):
-#+BEGIN_SRC: bash
-$ export PATH=${PATH}:${HOME}/bin/<new-location>/bin/emacs
-#+END_SRC
-as an example, or edit =with-emacs.sh= suitably to run the Emacs binary from a new location. Don't 
+At the moment, this script will run Emacs using the =with-emacs.sh= script, available from
+https://github.com/alphapapa/with-emacs.sh - if you wish to run the compiled Emacs from anywhere not
+already on the user's =PATH=, you will want to either add the installation directory (of the Emacs
+binary): #+BEGIN_SRC: bash $ export PATH=${PATH}:${HOME}/bin/<new-location>/bin/emacs #+END_SRC as
+an example, or edit =with-emacs.sh= suitably to run the Emacs binary from a new location. Don't
 forget to install the script somewhere on your =PATH=.
 
-To supply a different configuration directory to execute Emacs, adjust EMACSCONFHOME. This will affect
-with-emacs.sh.
+To supply a different configuration directory to execute Emacs, adjust EMACSCONFHOME. This will
+affect with-emacs.sh.
 
 * Future directions
-At this stage, I haven't got the foggiest idea what else I need, though I've already simplified this by
-removing the whole "execute emacs" stage, leaving that up to the with-emacs.sh script.
+At this stage, I haven't got the foggiest idea what else I need, though I've already simplified this
+by removing the whole "execute Emacs" stage, leaving that up to the with-emacs.sh script.
 
 The usual applies to anyone who wants to report bugs, issues or even suggestions, check out the
 issues section of this project.
-
