@@ -140,11 +140,10 @@ helpMe() {
     :header-args: bash :tangle /home/viking/src/bash/emacsmake/emacsmake
     :END:
 
-Distclean basically removes almost everything that didn't come with the source code,
-and maintainer-clean removes everything that was generated, leaving only the original code.
-I'm not sure about the distinction, though I used to know. One point I've noted is that
-neither command is gatekeepered, i.e. they both take immediate effect without the ability
-to back out.
+Distclean basically removes almost everything that didn't come with the source code, and
+maintainer-clean removes everything that was generated, leaving only the original code.  I'm not
+sure about the distinction, though I used to know. One point I've noted is that neither command is
+gatekeepered, i.e. they both take immediate effect without the ability to back out.
 
 #+BEGIN_SRC bash
 # Runs make distclean, but only if the configure step had created one.
@@ -174,12 +173,11 @@ cleanMeGood() {
     :header-args: bash :tangle /home/viking/src/bash/emacsmake/emacsmake
     :END:
 
-It's pretty obvious what this does, though it does presume we're in the correct directory,
-which we should be by the time we get here. Heck, if we weren't, something went badly
-wrong.
+It's pretty obvious what this does, though it does presume we're in the correct directory, which we
+should be by the time we get here. Heck, if we weren't, something went badly wrong.
 
-I learned to specify the location of the configure directly, so I don't accidentally
-pick up on a preinstalled configure somewhere in the ${PATH}.
+I learned to specify the location of the configure directly, so I don't accidentally pick up on a
+preinstalled configure somewhere in the ${PATH}.
 
 #+BEGIN_SRC bash
 # Runs configure phase
@@ -193,8 +191,8 @@ configMe() {
     :header-args: bash :tangle /home/viking/src/bash/emacsmake/emacsmake
     :END:
 
-The only note here is that we force a full recompile so we don't accidentally install stale
-.elc files from previous compiles.
+The only note here is that we force a full recompile so we don't accidentally install stale .elc
+files from previous compiles.
 
 #+BEGIN_SRC bash
 # Runs make (hopefully we ran configure first)
@@ -212,10 +210,9 @@ makeMe() {
     :header-args: bash :tangle /home/viking/src/bash/emacsmake/emacsmake
     :END:
 
-This should by rights require the user to use sudo for this phase, but I have no clue
-as to what's on a target machine for sudo permissions, if the user even has sudo rights.
-Otherwise, it's a stock standard install-emacs-to-target-directory at ${EMACSHOME}
-specified earlier in the PARAMS section.
+This should by rights require the user to use sudo for this phase, but I have no clue as to what's
+on a target machine for sudo permissions, if the user even has sudo rights.  Otherwise, it's a stock
+standard install-emacs-to-target-directory at ${EMACSHOME} specified earlier in the PARAMS section.
 
 #+BEGIN_SRC bash
 # Runs the install phase (currently don't need sudo, but would have normally done)
@@ -244,10 +241,10 @@ uninstallMe() {
     :header-args: bash :tangle /home/viking/src/bash/emacsmake/emacsmake
     :END:
 
-This runs the just-installed emacs from a config in sandbox, so I don't hose the main config.
-It does depend on an ancillary script called with-emacs.sh, which came from another place.
-It's not mandatory to have this script for anything other than running emacs with the config.
-I just hope I made a note of where to get it from, if I don't have it here on the local machine.
+This runs the just-installed emacs from a config in sandbox, so I don't hose the main config.  It
+does depend on an ancillary script called with-emacs.sh, which came from another place.  It's not
+mandatory to have this script for anything other than running emacs with the config.  I just hope I
+made a note of where to get it from, if I don't have it here on the local machine.
 
 #+BEGIN_SRC bash
 # Assuming everything else is done, runs compiled emacs from install
@@ -268,8 +265,9 @@ runMe() {
     :header-args: bash :tangle /home/viking/src/bash/emacsmake/emacsmake
     :END:
 
-Just string them all together in a sequence. I've made no attempt to support multiple stages, and
-have explicitly disallowed this by only allowing one arg down further in main().
+To call this, we just string all the sections together in a sequence. I've made no attempt to
+support multiple stages, and have explicitly disallowed this by only allowing one arg down further
+in main().
 
 #+BEGIN_SRC bash
 # Do everything
@@ -290,7 +288,7 @@ execMe() {
 
 This handles the arg matching, checks if we have a with-emacs.sh, and notifies us if we don't.
 It's assumed we know where to get this from if we don't have it, perhaps an incorrect assumption.
-p.s. it's available from github at the following link (assuming he didn't remove it):
+P.S. it's available from github at the following link (assuming he didn't remove it):
 https://github.com/alphapapa/with-emacs.sh
 
 We explicitly disallow multiple stages from being run, as we need to process things in a certain
@@ -365,7 +363,7 @@ echo "Ending... bye"
 #+END_SRC
 
 * Conclusions
-A fairly clean script, which would have been easy enough to understand without the extra
-descriptions. There's not a lot to this one, but I felt I needed to add a little clarification
-at certain spots.
+This was originally a fairly clean script, which would have been easy enough to understand without
+the extra descriptions. There's not a lot to this one, but I felt I needed to add a little
+clarification at certain spots. I've also tried to make it more "portable" between Emacs versions.
 
