@@ -28,9 +28,9 @@ compiled lisp code to live.
 
 
 ,* Executing Emacs
-At the moment, this script will run emacs using the =with-emacs.sh= script, available from
+At the moment, this script will run Emacs using the =with-emacs.sh= script, available from
 https://github.com/alphapapa/with-emacs.sh - if you wish to run the compiled Emacs from anywhere not
-already on the user's =PATH=, you will want to either add the installation directory (of the emacs
+already on the user's =PATH=, you will want to either add the installation directory (of the Emacs
 binary): #+BEGIN_SRC: bash $ export PATH=${PATH}:${HOME}/bin/<new-location>/bin/emacs #+END_SRC as
 an example, or edit =with-emacs.sh= suitably to run the Emacs binary from a new location. Don't
 forget to install the script somewhere on your =PATH=.
@@ -40,7 +40,7 @@ affect with-emacs.sh.
 
 ,* Future directions
 At this stage, I haven't got the foggiest idea what else I need, though I've already simplified this
-by removing the whole "execute emacs" stage, leaving that up to the with-emacs.sh script.
+by removing the whole "execute Emacs" stage, leaving that up to the with-emacs.sh script.
 
 The usual applies to anyone who wants to report bugs, issues or even suggestions, check out the
 issues section of this project.
@@ -51,7 +51,7 @@ issues section of this project.
     :PROPERTIES:
     :header-args: bash :tangle /home/viking/src/bash/emacsmake/emacsmake
     :END:
-A few notes made about things added/changed, along with a long-term target to meet for emacsen
+A few notes made about things added/changed, along with a long-term target to meet for Emacsen
 versions earlier than 28.0.50. Heck, 18.x (and earlier beasts) were done on far wimpier machines and
 earlier versions (13-18.58) predated the autoconf software suite which wasn't released until 1991.
 
@@ -66,7 +66,7 @@ earlier versions (13-18.58) predated the autoconf software suite which wasn't re
 # v0.6 Finally added link to with-emacs.sh - it's about time
 
 #
-# TODO: rework for versions of emacs earlier than 28.0.50, as there's no makefile until the
+# TODO: rework for versions of Emacs earlier than 28.0.50, as there's no makefile until the
 #       configure phase. Still doesn't work for much earlier than 23 - 18.59 has no configure.
 #+END_SRC
 
@@ -92,7 +92,7 @@ which ends up being my own personal settings testbed, so I don't blow away my ma
 # i.e. if there's no /root/src/c/emacs
 COMPILEHOME="${HOME}/src/c/emacs" # Should be specific, not user-relative
 
-# Place to put emacs (root of tree)
+# Place to put Emacs (root of tree)
 # EMACSHOME="${HOME}/bin/emacs-playpen"
 EMACSHOME="/usr/local/"
 CONFIGPARAMS=(
@@ -121,12 +121,12 @@ The boilerplate help just in case I forgot what switches I coded. Uses UNIX synt
 
 # Help function, usage()
 helpMe() {
-    echo "$0: emacs recompiler script"
+    echo "$0: Emacs recompiler script"
     echo "   -h    help (this text)"
     echo "   -d    Runs 'make distclean'"
     echo "   -D    Runs 'make maintainer-clean'"
     echo "   -e    run every step; distclean, configure, make, install, run"
-    echo "         default emacs binary location is ${EMACSHOME}"
+    echo "         default Emacs binary location is ${EMACSHOME}"
     echo "   -c    run ./configure with params ${CONFIGPARAMS[@]}"
     echo "   -m    compile (no install), runs make"
     echo "   -i    install to ${EMACSHOME}, runs make install"
@@ -168,7 +168,7 @@ cleanMeGood() {
 }
 #+END_SRC
 
-** Configure emacs for compilation
+** Configure Emacs for compilation
     :PROPERTIES:
     :header-args: bash :tangle /home/viking/src/bash/emacsmake/emacsmake
     :END:
@@ -219,18 +219,18 @@ standard install-emacs-to-target-directory at ${EMACSHOME} specified earlier in 
 installMe() {
     # echo "This will require you to enter in your password" # only needed for system dirs
     # sudo make install
-    # TODO: should check that there's a emacs binary first, but I don't know where that will be
+    # TODO: should check that there's an Emacs binary first, but I don't know where that will be
     make install
 }
 
 # Uninstall from $EMACSHOME
 uninstallMe() {
-    # Only requirements are that I've installed emacs at EMACSHOME
-    # and NOT reconfigured emacs since
+    # The only requirements are that I've installed Emacs at EMACSHOME
+    # and NOT reconfigured Emacs since
     if [[ -f "${EMACSHOME}/bin/emacs" ]]; then
 	make uninstall
     else
-	echo "Are you sure you installed emacs to ${EMACSHOME}?"
+	echo "Are you sure you installed Emacs to ${EMACSHOME}?"
     fi
 }
 
@@ -241,13 +241,13 @@ uninstallMe() {
     :header-args: bash :tangle /home/viking/src/bash/emacsmake/emacsmake
     :END:
 
-This runs the just-installed emacs from a config in sandbox, so I don't hose the main config.  It
+This runs the just-installed Emacs from a config in sandbox, so I don't hose the main config.  It
 does depend on an ancillary script called with-emacs.sh, which came from another place.  It's not
-mandatory to have this script for anything other than running emacs with the config.  I just hope I
+mandatory to have this script for anything other than running Emacs with the config.  I just hope I
 made a note of where to get it from, if I don't have it here on the local machine.
 
 #+BEGIN_SRC bash
-# Assuming everything else is done, runs compiled emacs from install
+# Assuming everything else is done, runs compiled Emacs from install
 runMe() {
     pushd "${EMACSHOME}"
     RETVAL=$( with-emacs.sh "${EMACSRUNARGS[@]}" )
@@ -309,7 +309,7 @@ However, I could have used short/long switches like the following:
 #    each arg read, sets val, then 
 #+END_QUOTE
 
-The -e:/--emacs: switch was the precursor for the "run emacs from this location instead" function
+The -e:/--emacs: switch was the precursor for the "run Emacs from this location instead" function
 from with-emacs.sh, but as the script does stuff better than I would have done, I left that up to
 the secondary script. It's not written by me, and the style is quite different - presumably someone
 who knows what they're doing.
@@ -323,7 +323,7 @@ SANDBOX_LOCATION=$(type -p with-emacs.sh)
 if [[ -z "${SANDBOX_LOCATION}" ]]; then
     echo "You do not have with-emacs.sh (check README.org), you should probably grab this"
     echo "from the following URL: https://github.com/alphapapa/with-emacs.sh"
-    echo "so you can run emacs from a sandboxed location."
+    echo "so you can run Emacs from a sandboxed location."
     echo "Continuing anyhow."
 fi
 unset SANDBOX_LOCATION
