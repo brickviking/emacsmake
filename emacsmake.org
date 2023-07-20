@@ -2,21 +2,26 @@
 #+AUTHOR: brickviking
 #+EMAIL: brickviking@gmail.com
 
-* Readme, in org format
+* Introduction
+This is a simple script to create Emacs from its source code. About the only thing missing from
+this is a licence, I haven't come up with a usable licence yet. 
 
-#+BEGIN_SRC org -i
+* Readme, in org format
   :PROPERTIES:
   :header-args: org :tangle README.org
   :END:
 
+
+#+BEGIN_SRC org -i
 ,* Introduction
 This is a very simple wrapper script to distclean, configure, make, install and execute Emacs.
 Changes can be made to the variables inside the script, which will help drive how Emacs can be
 compiled, installed and executed.
 
 ,* Variables and requirements
-First off, you'll need the source code to Emacs, adjust =COMPILEHOME=. You can either fetch and
-extract a static tarball of the source, or you can access either of the git repositories.
+First off, you'll need to install the source code to Emacs, adjust
+=COMPILEHOME=. You can either fetch and extract a static tarball of
+the source, or you can access either of the git repositories.
 
 Because you're compiling Emacs, you can choose which libraries to compile Emacs with; adjust the
 =CONFIGPARAMS= array for this. You might want to check the output of =./configure --help= from
