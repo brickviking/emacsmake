@@ -69,7 +69,7 @@ earlier versions (13-18.58) predated the autoconf software suite which wasn't re
 # v0.4 added distclean, maintainerclean, and run everything
 # v0.5 Renamed reference from emacs-sandbox to with-emacs as upstream has renamed
 # v0.6 Finally added link to with-emacs.sh - it's about time
-
+#      Added comment for checking number of args at runtime.
 #
 # TODO: rework for versions of Emacs earlier than 28.0.50, as there's no makefile until the
 #       configure phase. Still doesn't work for much earlier than 23 - 18.59 has no configure.
@@ -333,7 +333,7 @@ if [[ -z "${SANDBOX_LOCATION}" ]]; then
 fi
 unset SANDBOX_LOCATION
 
-if [[ -n $2 ]]; then
+if [[ -n $2 ]]; then # In short, if 2 or more args
     echo "$0: Too many arguments, we only need one of the following"
     helpMe
 elif [[ -n $1 ]]; then
