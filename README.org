@@ -14,7 +14,8 @@ within the source directory to see what parameters are supported. This will incl
 place to put the compiled version of Emacs, adjust =EMACSHOME=. Note that this is the root of the
 tree where the whole of Emacs will eventually live, not the location of the Emacs binary
 itself. Usually directories will be created below this point for the libraries, the binaries and the
-compiled lisp code to live.
+compiled lisp code to live. The usual place that is selected if you don't specify it would be
+=/usr/local=, just as with a lot of other configure-based build systems.
 
 
 * Executing Emacs
