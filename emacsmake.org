@@ -37,8 +37,11 @@ compiled lisp code to live. The usual place that is selected if you don't specif
 At the moment, this script will run Emacs using the =with-emacs.sh= script, available from
 https://github.com/alphapapa/with-emacs.sh - if you wish to run the compiled Emacs from anywhere not
 already on the user's =PATH=, you will want to either add the installation directory (of the Emacs
-binary): #+BEGIN_SRC: bash $ export PATH=${PATH}:${HOME}/bin/<new-location>/bin/emacs #+END_SRC as
-an example, or edit =with-emacs.sh= suitably to run the Emacs binary from a new location. Don't
+binary): 
+#+BEGIN_QUOTE bash 
+$ export PATH=${PATH}:${HOME}/bin/<new-location>/bin/emacs 
+#+END_QUOTE
+as an example, or edit =with-emacs.sh= suitably to run the Emacs binary from a new location. Don't
 forget to install the script somewhere on your =PATH=.
 
 To supply a different configuration directory to execute Emacs, adjust EMACSCONFHOME. This will
