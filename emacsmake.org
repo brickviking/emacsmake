@@ -44,7 +44,7 @@ $ export PATH=${PATH}:${HOME}/bin/<new-location>/bin/emacs
 as an example, or edit =with-emacs.sh= suitably to run the Emacs binary from a new location. Don't
 forget to install the script somewhere on your =PATH=.
 
-To supply a different configuration directory to execute Emacs, adjust EMACSCONFHOME. This will
+To supply a different configuration directory to execute Emacs with, adjust EMACSCONFHOME. This will
 affect with-emacs.sh.
 
 ,* Future directions
