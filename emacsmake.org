@@ -93,6 +93,19 @@ so that calling this from sudo doesn't bork with messages such as:
 Anyhow, there are some other tweakable values here which make sense except perhaps the playpen,
 which ends up being my own personal settings testbed, so I don't blow away my main configuration.
 
+Another thought—we could perhaps pull in our CONFIGPARAMS from a created-at-first-run file.
+The concept would be:
++ If we don't have a defaults file already
+  + prompt user for "Choose, or defaults" (*)
+  + write file back (for next time)
++ otherwise, read that file, and prompt user
+  + Defaults are ....., do you wish to change these?
+  + if so, select other defaults
+  + write file back (for next time)
+
+(*) We need to tweak COMPILEHOME, EMACSHOME and CONFIGPARAMS. The other two (EMACSCONFHOME and
+EMACSRUNARGS) aren't needed for compiling, merely for running.
+
 #+BEGIN_SRC bash
 #######################
 # Modifiable parameters
