@@ -106,7 +106,7 @@ The concept would be:
 (*) We need to tweak COMPILEHOME, EMACSHOME and CONFIGPARAMS. The other two (EMACSCONFHOME and
 EMACSRUNARGS) aren't needed for compiling, merely for running.
 
-#+BEGIN_SRC bash
+#+BEGIN_SRC bash -i
 #######################
 # Modifiable parameters
 # You WILL want to fiddle with these if you don't want the args I chose
@@ -137,7 +137,7 @@ EMACSRUNARGS=(
 
 The boilerplate help just in case I forgot what switches I coded. Uses UNIX syntax (-x) not Microsoft (/x).
 
-#+BEGIN_SRC bash
+#+BEGIN_SRC bash -i
 ###########
 # Functions
 
@@ -167,7 +167,7 @@ maintainer-clean removes everything that was generated, leaving only the origina
 sure about the distinction, though I used to know. One point I've noted is that neither command is
 gatekeepered, i.e. they both take immediate effect without the ability to back out.
 
-#+BEGIN_SRC bash
+#+BEGIN_SRC bash -i
 # Runs make distclean, but only if the configure step had created one.
 # TODO: no chance to break out of this, perhaps we should offer that
 cleanMe() {
@@ -201,7 +201,7 @@ should be by the time we get here. Heck, if we weren't, something went badly wro
 I learned to specify the location of the configure directly, so I don't accidentally pick up on a
 preinstalled configure somewhere in the ${PATH}.
 
-#+BEGIN_SRC bash
+#+BEGIN_SRC bash -i
 # Runs configure phase
 configMe() {
     ./configure "${CONFIGPARAMS[@]}"
@@ -216,7 +216,7 @@ configMe() {
 The only note here is that we force a full recompile so we don't accidentally install stale .elc
 files from previous compiles.
 
-#+BEGIN_SRC bash
+#+BEGIN_SRC bash -i
 # Runs make (hopefully we ran configure first)
 makeMe() {
     if [[ -f Makefile ]]; then
@@ -236,7 +236,7 @@ This should by rights require the user to use sudo for this phase, but I have no
 on a target machine for sudo permissions, if the user even has sudo rights.  Otherwise, it's a stock
 standard install-emacs-to-target-directory at ${EMACSHOME} specified earlier in the PARAMS section.
 
-#+BEGIN_SRC bash
+#+BEGIN_SRC bash -i
 # Runs the install phase (currently don't need sudo, but would have normally done)
 installMe() {
     # echo "This will require you to enter in your password" # only needed for system dirs
@@ -268,7 +268,7 @@ does depend on an ancillary script called with-emacs.sh, which came from another
 mandatory to have this script for anything other than running Emacs with the config.  I just hope I
 made a note of where to get it from, if I don't have it here on the local machine.
 
-#+BEGIN_SRC bash
+#+BEGIN_SRC bash -i
 # Assuming everything else is done, runs compiled Emacs from install
 runMe() {
     pushd "${EMACSHOME}"
@@ -291,7 +291,7 @@ To call this, we just string all the sections together in a sequence. I've made 
 support multiple stages, and have explicitly disallowed this by only allowing one arg down further
 in main().
 
-#+BEGIN_SRC bash
+#+BEGIN_SRC bash -i
 # Do everything
 execMe() {
     cleanMe
@@ -321,7 +321,7 @@ specified it last.
 I've also not made any attempt at using getopts, as I feel it's simply quicker to roll my own.
 However, I could have used short/long switches like the following:
 
-#+BEGIN_QUOTE bash
+#+BEGIN_QUOTE bash -i
 # Need a getopts-style processor here, or I could simply roll my own. Quicker to roll.
 # args=$(getopt -n "$0" -o cdDe:hmiru -l emacs:,config,distclean,maintainerclean,help,make,install,run,uninstall -- "$@") || { usage; exit 1; }
 
@@ -336,7 +336,7 @@ from with-emacs.sh, but as the script does stuff better than I would have done, 
 the secondary script. It's not written by me, and the style is quite different - presumably someone
 who knows what they're doing.
 
-#+BEGIN_SRC bash
+#+BEGIN_SRC bash -i
 ########
 # main()
 
@@ -389,3 +389,5 @@ This was originally a fairly clean script, which would have been easy enough to 
 the extra descriptions. There's not a lot to this one, but I felt I needed to add a little
 clarification at certain spots. I've also tried to make it more "portable" between Emacs versions.
 
+There's also no config file, and one could be used to help clean the script up. Reasonable defaults
+would still be needed.
