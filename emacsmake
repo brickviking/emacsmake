@@ -16,8 +16,9 @@
 # You WILL want to fiddle with these if you don't want the args I chose
 # This WILL break if the user running (EUID) isn't the same as the user owning the source directory
 # i.e. if there's no /root/src/c/emacs
-COMPILEHOME="${HOME}/src/c/emacs" # Should be specific, not user-relative
+#COMPILEHOME="${HOME}/src/c/emacs" # Should be specific, not user-relative
 
+COMPILEHOME=/h3/viking/src/c/hosts/gnu/emacs
 # Place to put Emacs (root of tree)
 # EMACSHOME="${HOME}/bin/emacs-playpen"
 EMACSHOME="/usr/local/"
@@ -79,7 +80,7 @@ configMe() {
 # Runs make (hopefully we ran configure first)
 makeMe() {
     if [[ -f Makefile ]]; then
-	make bootstrap # because we want stale .elc files regenned
+	make bootstrap -j4 # because we want stale .elc files regenned
     else
 	echo "No Makefile found, perhaps run with -c first?"
     fi
