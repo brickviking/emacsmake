@@ -114,7 +114,7 @@ EMACSRUNARGS) aren't needed for compiling, merely for running.
 # i.e. if there's no /root/src/c/emacs
 #COMPILEHOME="${HOME}/src/c/emacs" # Should be specific, not user-relative
 
-COMPILEHOME=/h3/viking/src/c/hosts/gnu/emacs
+COMPILEHOME="/h3/viking/src/c/hosts/gnu/emacs"
 # Place to put Emacs (root of tree)
 # EMACSHOME="${HOME}/bin/emacs-playpen"
 EMACSHOME="/usr/local/"
