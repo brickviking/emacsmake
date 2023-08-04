@@ -4,7 +4,7 @@
 
 * Introduction
 This is a simple script to create Emacs from its source code. About the only thing missing from
-this is a licence, I haven't come up with a usable licence yet. 
+this is a licence, I haven't come up with a usable licence yet.
 
 * Readme, in org format
   :PROPERTIES:
@@ -381,6 +381,34 @@ else # We don't have $1
 fi
 
 echo "Ending... bye"
+
+#+END_SRC
+* Makefile
+    :PROPERTIES:
+    :header-args: makefile :tangle /home/viking/src/bash/emacsmake/Makefile
+    :END:
+
+This is a dirt-simple Makefile that will hopefully install emacsmake into a system-wide location.
+It will need several runs at this, and I need to remember that recipes start off with a flush-left
+line, followed by tabbed recipe instructions.
+
+I deliberately haven't used "install" as I don't know what it does. I've also embedded a sudo inside
+the makefile, which probably isn't a great idea either, but hey, it's my own machine. This is also
+not for use on a Windows or MS-DOS/FreeDOS install.
+
+#+BEGIN_SRC makefile -i
+# Dirt-simple Makefile
+# v0.1 Initial cut while I learn what to do
+
+DESTDIR = /usr/local/bin
+
+install: emacsmake
+	@sudo cp -v emacsmake ${DESTDIR}/
+	@sudo chmod -v +x ${DESTDIR}/emacsmake
+
+uninstall:
+	@sudo rm -v ${DESTDIR}/emacsmake
+
 
 #+END_SRC
 
