@@ -58,7 +58,7 @@ issues section of this project.
 
 * Header and Changelog
     :PROPERTIES:
-    :header-args: bash :tangle /home/viking/src/bash/emacsmake/emacsmake
+    :header-args: bash :tangle emacsmake :tangle-mode (identity #o755)
     :END:
 A few notes made about things added/changed, along with a long-term target to meet for Emacsen
 versions earlier than 28.0.50. Heck, 18.x (and earlier beasts) were done on far wimpier machines and
@@ -74,15 +74,14 @@ earlier versions (13-18.58) predated the autoconf software suite which wasn't re
 # v0.5 Renamed reference from emacs-sandbox to with-emacs as upstream has renamed
 # v0.6 Finally added link to with-emacs.sh - it's about time
 #      Added comment for checking number of args at runtime.
+# v0.7 Added in a do-almost-all (clean, configure, make)
+# v0.8 Added some commented out options (lucid and motif)
 #
 # TODO: rework for versions of Emacs earlier than 28.0.50, as there's no makefile until the
 #       configure phase. Still doesn't work for much earlier than 23 - 18.59 has no configure.
 #+END_SRC
 
-* Parameters
-    :PROPERTIES:
-    :header-args: bash :tangle /home/viking/src/bash/emacsmake/emacsmake
-    :END:
+** Parameters
 
 So far, the only thing of note here is that we need a specific directory to be explicitly mentioned
 so that calling this from sudo doesn't bork with messages such as:
@@ -122,6 +121,8 @@ CONFIGPARAMS=(
     "--with-imagemagick"
     "--with-cairo"
     "--with-xwidgets"
+#    "--with-x-toolkit=lucid"
+#    "--with-x-toolkit=motif"
     "--prefix=${EMACSHOME}" )
 # This gets used to run with-emacs.sh with custom directory
 EMACSCONFHOME="${HOME}/.emacs-playpen"
@@ -130,11 +131,8 @@ EMACSRUNARGS=(
     "${EMACSCONFHOME}" )
 #+END_SRC
 
-* Functions
-** Help function
-    :PROPERTIES:
-    :header-args: bash :tangle /home/viking/src/bash/emacsmake/emacsmake
-    :END:
+** Functions
+*** Help function
 
 The boilerplate help just in case I forgot what switches I coded. Uses UNIX syntax (-x) not Microsoft (/x).
 
@@ -148,6 +146,7 @@ helpMe() {
     echo "   -h    help (this text)"
     echo "   -d    Runs 'make distclean'"
     echo "   -D    Runs 'make maintainer-clean'"
+    echo "   -a    Runs  every step except execute"
     echo "   -e    run every step; distclean, configure, make, install, run"
     echo "         default Emacs binary location is ${EMACSHOME}"
     echo "   -c    run ./configure with params ${CONFIGPARAMS[@]}"
@@ -158,10 +157,7 @@ helpMe() {
 }
 #+END_SRC
 
-** Cleaning scripts distclean/maintainer-clean
-    :PROPERTIES:
-    :header-args: bash :tangle /home/viking/src/bash/emacsmake/emacsmake
-    :END:
+*** Cleaning scripts distclean/maintainer-clean
 
 Distclean basically removes almost everything that didn't come with the source code, and
 maintainer-clean removes everything that was generated, leaving only the original code.  I'm not
@@ -191,10 +187,7 @@ cleanMeGood() {
 }
 #+END_SRC
 
-** Configure Emacs for compilation
-    :PROPERTIES:
-    :header-args: bash :tangle /home/viking/src/bash/emacsmake/emacsmake
-    :END:
+*** Configure Emacs for compilation
 
 It's pretty obvious what this does, though it does presume we're in the correct directory, which we
 should be by the time we get here. Heck, if we weren't, something went badly wrong.
@@ -209,10 +202,7 @@ configMe() {
 }
 #+END_SRC
 
-** Make command
-    :PROPERTIES:
-    :header-args: bash :tangle /home/viking/src/bash/emacsmake/emacsmake
-    :END:
+*** Make command
 
 The only note here is that we force a full recompile so we don't accidentally install stale .elc
 files from previous compiles.
@@ -228,10 +218,7 @@ makeMe() {
 }
 #+END_SRC
 
-** Install/uninstall
-    :PROPERTIES:
-    :header-args: bash :tangle /home/viking/src/bash/emacsmake/emacsmake
-    :END:
+*** Install/uninstall
 
 This should by rights require the user to use sudo for this phase, but I have no clue as to what's
 on a target machine for sudo permissions, if the user even has sudo rights.  Otherwise, it's a stock
@@ -259,10 +246,7 @@ uninstallMe() {
 
 #+END_SRC
 
-** Running
-    :PROPERTIES:
-    :header-args: bash :tangle /home/viking/src/bash/emacsmake/emacsmake
-    :END:
+*** Running
 
 This runs the just-installed Emacs from a config in sandbox, so I don't hose the main config.  It
 does depend on an ancillary script called with-emacs.sh, which came from another place.  It's not
@@ -283,31 +267,30 @@ runMe() {
 }
 #+END_SRC
 
-** Do-everything section
-    :PROPERTIES:
-    :header-args: bash :tangle /home/viking/src/bash/emacsmake/emacsmake
-    :END:
+*** Do-everything section
 
 To call this, we just string all the sections together in a sequence. I've made no attempt to
 support multiple stages, and have explicitly disallowed this by only allowing one arg down further
 in main().
 
 #+BEGIN_SRC bash -i
-# Do everything
-execMe() {
-    cleanMe
+# Do almost everything
+execMakeMe() {
+    cleanMe # it's a distclean
     configMe
     makeMe
+}
+
+# Do everything except runMe - may require sudo
+execMe() {
+    execMakeMe # distclean, config and make
     installMe
-    runMe
+#    runMe
 }
 
 #+END_SRC
 
-* Main
-    :PROPERTIES:
-    :header-args: bash :tangle /home/viking/src/bash/emacsmake/emacsmake
-    :END:
+** Main
 
 This handles the arg matching, checks if we have a with-emacs.sh, and notifies us if we don't.
 It's assumed we know where to get this from if we don't have it, perhaps an incorrect assumption.
@@ -361,6 +344,8 @@ elif [[ -n $1 ]]; then
 	      cleanMe ;;
 	"-D") pushd "${COMPILEHOME}"
 	    cleanMeGood ;;
+        "-a") pushd "${COMPILEHOME}"
+              execMakeMe ;;
         "-e") pushd "${COMPILEHOME}" # Eventually changes to ${EMACSHOME}
 	      execMe ;;
         "-c") pushd "${COMPILEHOME}"
@@ -386,7 +371,7 @@ echo "Ending... bye"
 #+END_SRC
 * Makefile
     :PROPERTIES:
-    :header-args: makefile :tangle /home/viking/src/bash/emacsmake/Makefile
+    :header-args: makefile :tangle Makefile
     :END:
 
 This is a dirt-simple Makefile that will hopefully install emacsmake into a system-wide location.
