@@ -50,6 +50,9 @@ helpMe() {
     echo "   -e    run every step; distclean, configure, make, install, run"
     echo "         default Emacs binary location is ${EMACSHOME}"
     echo "   -c    run ./configure with params ${CONFIGPARAMS[@]}"
+    echo "   -cg    run ./configure with params ${CONFIGPARAMS[@]} and Gtk3"
+    echo "   -cl    run ./configure with params ${CONFIGPARAMS[@]} and lucid"
+    echo "   -cm    run ./configure with params ${CONFIGPARAMS[@]} and Motif"
     echo "   -m    compile (no install), runs make"
     echo "   -i    install to ${EMACSHOME}, runs make install"
     echo "   -r    execute from ${EMACSHOME}, runs  with-emacs.sh -d "${EMACSCONFHOME}" -i quelpa-use-package "
@@ -79,6 +82,34 @@ cleanMeGood() {
 
 # Runs configure phase
 configMe() {
+    ./configure "${CONFIGPARAMS[@]}"
+}
+
+# Default unless something else chosen
+configMeGtk3() {
+CONFIGPARAMS=(
+    "--with-imagemagick"
+    "--with-cairo"
+    "--with-xwidgets"
+    "--prefix=${EMACSHOME}" )
+    ./configure "${CONFIGPARAMS[@]}"
+}
+
+configMeLucid() {
+CONFIGPARAMS=(
+    "--with-imagemagick"
+    "--with-cairo"
+    "--with-x-toolkit=lucid"
+    "--prefix=${EMACSHOME}" )
+    ./configure "${CONFIGPARAMS[@]}"
+}
+
+configMeMotif() {
+CONFIGPARAMS=(
+    "--with-imagemagick"
+    "--with-cairo"
+    "--with-x-toolkit=motif"
+    "--prefix=${EMACSHOME}" )
     ./configure "${CONFIGPARAMS[@]}"
 }
 
@@ -165,6 +196,12 @@ elif [[ -n $1 ]]; then
 	      execMe ;;
         "-c") pushd "${COMPILEHOME}"
 	      configMe ;;
+        "-cg") pushd "${COMPILEHOME}"
+	      configMeGtk3 ;;
+        "-cl") pushd "${COMPILEHOME}"
+	      configMeLucid ;;
+        "-cm") pushd "${COMPILEHOME}"
+	      configMeMotif ;;
         "-m") pushd "${COMPILEHOME}"
 	      makeMe ;;
         "-i") pushd "${COMPILEHOME}"
