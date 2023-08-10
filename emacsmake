@@ -9,6 +9,8 @@
 #      Added comment for checking number of args at runtime.
 # v0.7 Added in a do-almost-all (clean, configure, make)
 # v0.8 Added some commented out options (lucid and motif)
+# v0.8.1 Twiddled with config, error's only in the docs
+# v0.8.2 fixed docs for config with ugly hack.
 #
 # TODO: rework for versions of Emacs earlier than 28.0.50, as there's no makefile until the
 #       configure phase. Still doesn't work for much earlier than 23 - 18.59 has no configure.
@@ -24,12 +26,12 @@ COMPILEHOME="/h3/viking/src/c/hosts/gnu/emacs"
 # Place to put Emacs (root of tree)
 # EMACSHOME="${HOME}/bin/emacs-playpen"
 EMACSHOME="/usr/local/"
+# Default, but check the configMe functions further down
 CONFIGPARAMS=(
     "--with-imagemagick"
     "--with-cairo"
     "--with-xwidgets"
-#    "--with-x-toolkit=lucid"
-#    "--with-x-toolkit=motif"
+    "--with-x-toolkit=gtk3" # for completeness's sake
     "--prefix=${EMACSHOME}" )
 # This gets used to run with-emacs.sh with custom directory
 EMACSCONFHOME="${HOME}/.emacs-playpen"
@@ -40,7 +42,36 @@ EMACSRUNARGS=(
 ###########
 # Functions
 
-# Help function, usage()
+# Help function, usage(), ugly hack to put in toolkits
+CONFIGPARAMSGTK=(
+    "--with-imagemagick"
+    "--with-cairo"
+    "--with-x-toolkit=gtk" # for completeness's sake
+    "--prefix=${EMACSHOME}"
+)
+CONFIGPARAMSGTK2=(
+    "--with-imagemagick"
+    "--with-cairo"
+    "--with-x-toolkit=gtk2" # for completeness's sake
+    "--prefix=${EMACSHOME}"
+)
+CONFIGPARAMSGTK3=(
+    "--with-imagemagick"
+    "--with-cairo"
+    "--with-xwidgets"
+    "--with-x-toolkit=gtk3" # for completeness's sake
+    "--prefix=${EMACSHOME}")
+CONFIGPARAMSLUCID=(
+    "--with-imagemagick"
+    "--with-cairo"
+    "--with-x-toolkit=lucid"
+    "--prefix=${EMACSHOME}")
+CONFIGPARAMSMOTIF=(
+    "--with-imagemagick"
+    "--with-cairo"
+    "--with-x-toolkit=motif"
+    "--prefix=${EMACSHOME}")
+
 helpMe() {
     echo "$0: Emacs recompiler script"
     echo "   -h    help (this text)"
@@ -50,9 +81,10 @@ helpMe() {
     echo "   -e    run every step; distclean, configure, make, install, run"
     echo "         default Emacs binary location is ${EMACSHOME}"
     echo "   -c    run ./configure with params ${CONFIGPARAMS[@]}"
-    echo "   -cg    run ./configure with params ${CONFIGPARAMS[@]} and Gtk3"
-    echo "   -cl    run ./configure with params ${CONFIGPARAMS[@]} and lucid"
-    echo "   -cm    run ./configure with params ${CONFIGPARAMS[@]} and Motif"
+    echo "   -cg    run ./configure with params ${CONFIGPARAMSGTK[@]}"
+    echo "   -cg2    run ./configure with params ${CONFIGPARAMSGTK2[@]}"
+    echo "   -cl    run ./configure with params ${CONFIGPARAMSLUCID[@]}"
+    echo "   -cm    run ./configure with params ${CONFIGPARAMSMOTIF[@]}"
     echo "   -m    compile (no install), runs make"
     echo "   -i    install to ${EMACSHOME}, runs make install"
     echo "   -r    execute from ${EMACSHOME}, runs  with-emacs.sh -d "${EMACSCONFHOME}" -i quelpa-use-package "
@@ -85,14 +117,30 @@ configMe() {
     ./configure "${CONFIGPARAMS[@]}"
 }
 
-# Default unless something else chosen
-configMeGtk3() {
+# Should support the GTK1 crowd
+configMeGTK() {
 CONFIGPARAMS=(
     "--with-imagemagick"
     "--with-cairo"
-    "--with-xwidgets"
+    "--with-x-toolkit=gtk"
     "--prefix=${EMACSHOME}" )
     ./configure "${CONFIGPARAMS[@]}"
+}
+
+# Should support the GTK2 crowd too
+configMeGTK2() {
+CONFIGPARAMS=(
+    "--with-imagemagick"
+    "--with-cairo"
+    "--with-x-toolkit=gtk2"
+    "--prefix=${EMACSHOME}" )
+    ./configure "${CONFIGPARAMS[@]}"
+}
+
+
+# Default unless something else chosen, simply call configMe
+configMeGtk3() {
+    configMe
 }
 
 configMeLucid() {
@@ -195,9 +243,11 @@ elif [[ -n $1 ]]; then
         "-e") pushd "${COMPILEHOME}" # Eventually changes to ${EMACSHOME}
 	      execMe ;;
         "-c") pushd "${COMPILEHOME}"
-	      configMe ;;
+	      configMe ;; # Uses GTK3 with xwidgets
         "-cg") pushd "${COMPILEHOME}"
-	      configMeGtk3 ;;
+	      configMeGtk ;;
+        "-cg2") pushd "${COMPILEHOME}"
+	      configMeGtk2 ;;
         "-cl") pushd "${COMPILEHOME}"
 	      configMeLucid ;;
         "-cm") pushd "${COMPILEHOME}"
