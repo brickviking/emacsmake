@@ -122,6 +122,7 @@ COMPILEHOME="/h3/viking/src/c/hosts/gnu/emacs"
 EMACSHOME="/usr/local/"
 # Default, but check the configMe functions further down
 CONFIGPARAMS=(
+    "--with-modules"
     "--with-imagemagick"
     "--with-cairo"
     "--with-xwidgets"
@@ -243,6 +244,7 @@ configMe() {
 # Should support the GTK1 crowd
 configMeGTK() {
 CONFIGPARAMS=(
+    "--with-modules"
     "--with-imagemagick"
     "--with-cairo"
     "--with-x-toolkit=gtk"
@@ -253,6 +255,7 @@ CONFIGPARAMS=(
 # Should support the GTK2 crowd too
 configMeGTK2() {
 CONFIGPARAMS=(
+    "--with-modules"
     "--with-imagemagick"
     "--with-cairo"
     "--with-x-toolkit=gtk2"
@@ -268,6 +271,7 @@ configMeGtk3() {
 
 configMeLucid() {
 CONFIGPARAMS=(
+    "--with-modules"
     "--with-imagemagick"
     "--with-cairo"
     "--with-x-toolkit=lucid"
@@ -277,6 +281,7 @@ CONFIGPARAMS=(
 
 configMeMotif() {
 CONFIGPARAMS=(
+    "--with-modules"
     "--with-imagemagick"
     "--with-cairo"
     "--with-x-toolkit=motif"
