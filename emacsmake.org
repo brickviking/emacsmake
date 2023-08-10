@@ -440,10 +440,10 @@ elif [[ -n $1 ]]; then
 	      configMe
               popd ;; # Uses GTK3 with xwidgets
         "-cg") pushd "${COMPILEHOME}"
-	      configMeGtk
+	      configMeGTK
               popd ;;
         "-cg2") pushd "${COMPILEHOME}"
-	      configMeGtk2
+	      configMeGTK2
               popd ;;
         "-cl") pushd "${COMPILEHOME}"
 	      configMeLucid
