@@ -425,35 +425,47 @@ elif [[ -n $1 ]]; then
     case $1 in 
         "-h"|"--help"|"-?") helpMe ;;
         "-d") pushd "${COMPILEHOME}"
-	      cleanMe ;;
+	      cleanMe
+              popd ;;
 	"-D") pushd "${COMPILEHOME}"
-	    cleanMeGood ;;
+	    cleanMeGood
+              popd ;;
         "-a") pushd "${COMPILEHOME}"
-              execMakeMe ;;
+              execMakeMe
+              popd ;;
         "-e") pushd "${COMPILEHOME}" # Eventually changes to ${EMACSHOME}
-	      execMe ;;
+	      execMe
+              popd ;;
         "-c") pushd "${COMPILEHOME}"
-	      configMe ;; # Uses GTK3 with xwidgets
+	      configMe
+              popd ;; # Uses GTK3 with xwidgets
         "-cg") pushd "${COMPILEHOME}"
-	      configMeGtk ;;
+	      configMeGtk
+              popd ;;
         "-cg2") pushd "${COMPILEHOME}"
-	      configMeGtk2 ;;
+	      configMeGtk2
+              popd ;;
         "-cl") pushd "${COMPILEHOME}"
-	      configMeLucid ;;
+	      configMeLucid
+              popd ;;
         "-cm") pushd "${COMPILEHOME}"
-	      configMeMotif ;;
+	      configMeMotif
+              popd ;;
         "-m") pushd "${COMPILEHOME}"
-	      makeMe ;;
+	      makeMe
+              popd ;;
         "-i") pushd "${COMPILEHOME}"
-	      installMe ;;
+	      installMe
+              popd ;;
         "-r") pushd "${EMACSHOME}"
-	      runMe ;;
+	      runMe
+              popd ;;
 	"-u") pushd "${COMPILEHOME}"
-	      uninstallMe ;;
+	      uninstallMe
+              popd ;;
         *) pushd "."
 	      helpMe ;;
     esac
-popd # FIXME: reverse whatever pushd we did, errors when helpMe called
 else # We don't have $1
     helpMe
 fi
