@@ -79,6 +79,7 @@ earlier versions (13-18.58) predated the autoconf software suite which wasn't re
 # v0.8 Added some commented out options (lucid and motif)
 # v0.8.1 Twiddled with config, error's only in the docs
 # v0.8.2 fixed docs for config with ugly hack.
+# v0.9 Planning install upgrade to symlink the emacs binary to emacs-${VER}-$[WMGR}
 #
 # TODO: rework for versions of Emacs earlier than 28.0.50, as there's no makefile until the
 #       configure phase. Still doesn't work for much earlier than 23 - 18.59 has no configure.
@@ -128,6 +129,7 @@ CONFIGPARAMS=(
     "--with-xwidgets"
     "--with-x-toolkit=gtk3" # for completeness's sake
     "--prefix=${EMACSHOME}" )
+WMGR=gtk3
 # This gets used to run with-emacs.sh with custom directory
 EMACSCONFHOME="${HOME}/.emacs-playpen"
 EMACSRUNARGS=(
@@ -242,11 +244,11 @@ preinstalled configure somewhere in the ${PATH}.
 
 #+BEGIN_SRC bash -i
 # Runs configure phase
-configMe() {
+configMe() { # This just does GTK3, other command switches toggle
     ./configure "${CONFIGPARAMS[@]}"
 }
 
-# Should support the GTK1 crowd
+# Should support the GTK1 crowd but here, just grabs gtk3
 configMeGTK() {
 CONFIGPARAMS=(
     "--with-modules"
@@ -254,6 +256,7 @@ CONFIGPARAMS=(
     "--with-cairo"
     "--with-x-toolkit=gtk"
     "--prefix=${EMACSHOME}" )
+    WMGR=gtk # (might be gtk3)
     ./configure "${CONFIGPARAMS[@]}"
 }
 
@@ -265,6 +268,7 @@ CONFIGPARAMS=(
     "--with-cairo"
     "--with-x-toolkit=gtk2"
     "--prefix=${EMACSHOME}" )
+    WMGR=gtk2
     ./configure "${CONFIGPARAMS[@]}"
 }
 
@@ -274,6 +278,7 @@ configMeGtk3() {
     configMe
 }
 
+# Choose this if you never installed gtk - crazy, huh?
 configMeLucid() {
 CONFIGPARAMS=(
     "--with-modules"
@@ -281,9 +286,11 @@ CONFIGPARAMS=(
     "--with-cairo"
     "--with-x-toolkit=lucid"
     "--prefix=${EMACSHOME}" )
+    WMGR=lucid
     ./configure "${CONFIGPARAMS[@]}"
 }
 
+# Choose this if you actually have a Motif or LessTif
 configMeMotif() {
 CONFIGPARAMS=(
     "--with-modules"
@@ -291,6 +298,7 @@ CONFIGPARAMS=(
     "--with-cairo"
     "--with-x-toolkit=motif"
     "--prefix=${EMACSHOME}" )
+    WMGR=motif
     ./configure "${CONFIGPARAMS[@]}"
 }
 
@@ -317,14 +325,30 @@ makeMe() {
 This should by rights require the user to use sudo for this phase, but I have no clue as to what's
 on a target machine for sudo permissions, if the user even has sudo rights.  Otherwise, it's a stock
 standard install-emacs-to-target-directory at ${EMACSHOME} specified earlier in the PARAMS section.
+One point not in the defaults is to copy the binary to a file that has the toolkit embedded in the
+name.
 
 #+BEGIN_SRC bash -i
+# This copies the delivered binary ${EMACSHOME}/bin/emacs${VERSION} to emacs${VERSION}-$[WMGR}
+# which will be something like emacs-29.1.50-{gtk2,gtk3,lucid,motif}
+# May not work for versions earlier than 28
+copyMe() {
+    # If we fail to find an emacs here, we failed to install
+    if [[ -f ${EMACSHOME}/bin/emacs ]];
+        EMACSTGT="$(readlink ${EMACSHOME}/bin/emacs)"
+        cp -i ${EMACSHOME}/bin/emacs ${EMACSTGT}-${WMGR}
+    else
+        echo "$0: we couldn't find an emacs at ${EMACSHOME} or ${WMGR} isn't set."
+    fi
+}
+
 # Runs the install phase (currently don't need sudo, but would have normally done)
 installMe() {
     # echo "This will require you to enter in your password" # only needed for system dirs
     # sudo make install
     # TODO: should check that there's an Emacs binary first, but I don't know where that will be
     make install
+    copyMe
 }
 
 # Uninstall from $EMACSHOME
@@ -378,7 +402,7 @@ execMakeMe() {
 # Do everything except runMe - may require sudo
 execMe() {
     execMakeMe # distclean, config and make
-    installMe
+    installMe # Don't add copyMe to this, it's called from here already
 #    runMe
 }
 
@@ -387,8 +411,8 @@ execMe() {
 ** Main
 
 This handles the arg matching, checks if we have a with-emacs.sh, and notifies us if we don't.
-It's assumed we know where to get this from if we don't have it, perhaps an incorrect assumption.
-P.S. it's available from github at the following link (assuming he didn't remove it):
+It's assumed we know how to get this from Github if we don't have it, perhaps an incorrect
+assumption. It's available from Github at the following link (assuming he didn't remove it):
 https://github.com/alphapapa/with-emacs.sh
 
 We explicitly disallow multiple stages from being run, as we need to process things in a certain
