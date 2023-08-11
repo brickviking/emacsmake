@@ -45,29 +45,34 @@ EMACSRUNARGS=(
 
 # Help function, usage(), ugly hack to put in toolkits
 CONFIGPARAMSGTK=(
+    "--with-modules"
     "--with-imagemagick"
     "--with-cairo"
     "--with-x-toolkit=gtk" # for completeness's sake
     "--prefix=${EMACSHOME}"
 )
 CONFIGPARAMSGTK2=(
+    "--with-modules"
     "--with-imagemagick"
     "--with-cairo"
     "--with-x-toolkit=gtk2" # for completeness's sake
     "--prefix=${EMACSHOME}"
 )
 CONFIGPARAMSGTK3=(
+    "--with-modules"
     "--with-imagemagick"
     "--with-cairo"
     "--with-xwidgets"
     "--with-x-toolkit=gtk3" # for completeness's sake
     "--prefix=${EMACSHOME}")
 CONFIGPARAMSLUCID=(
+    "--with-modules"
     "--with-imagemagick"
     "--with-cairo"
     "--with-x-toolkit=lucid"
     "--prefix=${EMACSHOME}")
 CONFIGPARAMSMOTIF=(
+    "--with-modules"
     "--with-imagemagick"
     "--with-cairo"
     "--with-x-toolkit=motif"
