@@ -193,7 +193,7 @@ makeMe() {
 # May not work for versions earlier than 28
 copyMe() {
     # If we fail to find an emacs here, we failed to install
-    if [[ -f ${EMACSHOME}/bin/emacs ]];
+    if [[ -f ${EMACSHOME}/bin/emacs ]]; then
         EMACSTGT="$(readlink ${EMACSHOME}/bin/emacs)"
         cp -i ${EMACSHOME}/bin/emacs ${EMACSTGT}-${WMGR}
     else
