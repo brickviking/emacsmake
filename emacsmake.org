@@ -327,6 +327,7 @@ on a target machine for sudo permissions, if the user even has sudo rights.  Oth
 standard install-emacs-to-target-directory at ${EMACSHOME} specified earlier in the PARAMS section.
 One point not in the defaults is to copy the binary to a file that has the toolkit embedded in the
 name.
+Something's weird with the cp, timestamp doesn't seem to get updated.
 
 #+BEGIN_SRC bash -i
 # This copies the delivered binary ${EMACSHOME}/bin/emacs${VERSION} to emacs${VERSION}-$[WMGR}
