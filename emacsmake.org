@@ -337,7 +337,7 @@ copyMe() {
     # If we fail to find an emacs here, we failed to install
     if [[ -f ${EMACSHOME}/bin/emacs ]]; then
         EMACSTGT="$(readlink ${EMACSHOME}/bin/emacs)"
-        cp -i ${EMACSHOME}/bin/emacs ${EMACSTGT}-${WMGR}
+        cp -iv ${EMACSHOME}/bin/emacs ${EMACSTGT}-${WMGR}
     else
         echo "$0: we couldn't find an emacs at ${EMACSHOME} or ${WMGR} isn't set."
     fi
