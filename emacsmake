@@ -188,6 +188,29 @@ makeMe() {
     fi
 }
 
+# Find what I made already, this is normally called from installMe
+whatMadeMe() {
+    # Piece to load into an array so I can parse the --with-x-toolkit parameter
+    # VERY sensitive to configure output - if it changes, then this won't work.
+    if [[ -f config.log ]]; then
+        mapfile -t TOOLKIT < <(sed -n '7p' config.log | cut -c17-)
+        for this in ${TOOLKIT[@]}; do
+            case "${this}" in
+                "--with-x-toolkit=gtk") WMGR=gtk ;; # Works out to be gtk3 here
+                "--with-x-toolkit=gtk2") WMGR=gtk2 ;;
+                "--with-x-toolkit=gtk3") WMGR=gtk3 ;;
+                "--with-x-toolkit=lucid") WMGR=lucid ;;
+                "--with-x-toolkit=motif") WMGR=motif ;;
+            esac # We can simply ignore everything else
+        done # for this in ${TOOLKIT}
+        printf "Toolkit is: %s\n" ${WMGR}
+    else
+        echo "I don't think you ran configure in ${COMPILEHOME}. Please rerun emacsmake with a -c parameter"
+        popd # just to keep the stack straight
+        exit 1 # Shouldn't really exit here
+    fi
+}
+
 # This copies the delivered binary ${EMACSHOME}/bin/emacs${VERSION} to emacs-${VERSION}-$[WMGR}
 # which will be something like emacs-29.1.50-{gtk2,gtk3,lucid,motif}
 # May not work for versions earlier than 28
@@ -195,8 +218,8 @@ copyMe() {
     # If we fail to find an emacs here, we failed to install
     if [[ -f ${EMACSHOME}/bin/emacs ]]; then
         EMACSTGT="$(readlink ${EMACSHOME}/bin/emacs)"
-        echo "Linking ${EMACSHOME}/bin/emacs to ${EMACSHOME}/bin/${EMACSTGT}-${WMGR}"
-        cp -iv ${EMACSHOME}/bin/emacs ${EMACSHOME}/bin/${EMACSTGT}-${WMGR}
+        echo "Linking ${EMACSHOME}/bin/${EMACSTGT} to ${EMACSHOME}/bin/${EMACSTGT}-${WMGR}"
+        cp -iv ${EMACSHOME}/bin/${EMACSTGT} ${EMACSHOME}/bin/${EMACSTGT}-${WMGR}
     else
         echo "$0: we couldn't find an emacs at ${EMACSHOME} or ${WMGR} isn't set."
     fi
@@ -207,6 +230,11 @@ installMe() {
     # echo "This will require you to enter in your password" # only needed for system dirs
     # sudo make install
     # TODO: should check that there's an Emacs binary first, but I don't know where that will be
+    # First, find out what we made from what's been left behind in the last compile
+    whatMadeMe
+    if [[ -z ${WMGR} ]]; then
+        echo "No toolkit selected, you should probably have run emacsmake -c"
+    fi
     make install
     copyMe
 }
@@ -305,6 +333,10 @@ elif [[ -n $1 ]]; then
               popd ;;
 	"-u") pushd "${COMPILEHOME}"
 	      uninstallMe
+              popd ;;
+        # Find out what we have before
+        "-w") pushd "${COMPILEHOME}"
+              whatMadeMe
               popd ;;
         *) pushd "."
 	      helpMe ;;
