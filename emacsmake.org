@@ -523,8 +523,8 @@ the makefile, which probably isn't a great idea either, but hey, it's my own mac
 not for use on a Windows or MS-DOS/FreeDOS install.
 
 #+BEGIN_SRC makefile -i
-# Dirt-simple Makefile
-# v0.1 Initial cut while I learn what to do
+# Dirt-simple Makefile to install the emacsmake script
+# v0.1 Initial cut - it only has to install one thing.
 
 DESTDIR = /usr/local/bin
 
