@@ -26,7 +26,7 @@
 COMPILEHOME="/h3/viking/src/c/hosts/gnu/emacs"
 # Place to put Emacs (root of tree)
 # EMACSHOME="${HOME}/bin/emacs-playpen"
-EMACSHOME="/usr/local/"
+EMACSHOME="/usr/local"
 # Default, but check the configMe functions further down
 CONFIGPARAMS=(
     "--with-modules"
@@ -188,14 +188,15 @@ makeMe() {
     fi
 }
 
-# This copies the delivered binary ${EMACSHOME}/bin/emacs${VERSION} to emacs${VERSION}-$[WMGR}
+# This copies the delivered binary ${EMACSHOME}/bin/emacs${VERSION} to emacs-${VERSION}-$[WMGR}
 # which will be something like emacs-29.1.50-{gtk2,gtk3,lucid,motif}
 # May not work for versions earlier than 28
 copyMe() {
     # If we fail to find an emacs here, we failed to install
     if [[ -f ${EMACSHOME}/bin/emacs ]]; then
         EMACSTGT="$(readlink ${EMACSHOME}/bin/emacs)"
-        cp -i ${EMACSHOME}/bin/emacs ${EMACSTGT}-${WMGR}
+        echo "Linking ${EMACSHOME}/bin/emacs to ${EMACSHOME}/bin/${EMACSTGT}-${WMGR}"
+        cp -iv ${EMACSHOME}/bin/emacs ${EMACSHOME}/bin/${EMACSTGT}-${WMGR}
     else
         echo "$0: we couldn't find an emacs at ${EMACSHOME} or ${WMGR} isn't set."
     fi
