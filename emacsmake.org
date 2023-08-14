@@ -402,9 +402,9 @@ uninstallMe() {
     # The only requirements are that I've installed Emacs at EMACSHOME
     # and NOT reconfigured Emacs since
     if [[ -f "${EMACSHOME}/bin/emacs" ]]; then
-	make uninstall
+        make uninstall
     else
-	echo "Are you sure you installed Emacs to ${EMACSHOME}?"
+        echo "Are you sure you installed Emacs to ${EMACSHOME}?"
     fi
 }
 
