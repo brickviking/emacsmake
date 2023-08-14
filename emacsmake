@@ -192,8 +192,9 @@ makeMe() {
 whatMadeMe() {
     # Piece to load into an array so I can parse the --with-x-toolkit parameter
     # VERY sensitive to configure output - if it changes, then this won't work.
+    # If I search for $ ./configure I'll find the right line.
     if [[ -f config.log ]]; then
-        mapfile -t TOOLKIT < <(sed -n '7p' config.log | cut -c17-)
+        mapfile -t TOOLKIT < <(sed -n '/\$ .\/configure/p' config.log | cut -c17-)
         for this in ${TOOLKIT[@]}; do
             case "${this}" in
                 "--with-x-toolkit=gtk") WMGR=gtk ;; # Works out to be gtk3 here
