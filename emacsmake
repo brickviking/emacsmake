@@ -12,6 +12,7 @@
 # v0.8.1 Twiddled with config, error's only in the docs
 # v0.8.2 fixed docs for config with ugly hack.
 # v0.9 Planning install upgrade to symlink the emacs binary to emacs-${VER}-$[WMGR}
+# v0.10 Reworked all the pushd/popd to be quiet, by redirecting their output to /dev/null.
 #
 # TODO: rework for versions of Emacs earlier than 28.0.50, as there's no makefile until the
 #       configure phase. Still doesn't work for much earlier than 23 - 18.59 has no configure.
@@ -207,7 +208,7 @@ whatMadeMe() {
         printf "Toolkit is: %s\n" ${WMGR}
     else
         echo "I don't think you ran configure in ${COMPILEHOME}. Please rerun emacsmake with a -c parameter"
-        popd # just to keep the stack straight
+        popd >/dev/null # just to keep the stack straight
         exit 1 # Shouldn't really exit here
     fi
 }
@@ -260,7 +261,7 @@ runMe() {
     else
         echo "Completed with success"
     fi
-    popd
+    popd >/dev/null
 }
 
 # Do almost everything
@@ -296,51 +297,51 @@ if [[ -n $2 ]]; then # In short, if 2 or more args
 elif [[ -n $1 ]]; then
     case $1 in 
         "-h"|"--help"|"-?") helpMe ;;
-        "-d") pushd "${COMPILEHOME}"
-	      cleanMe
-              popd ;;
-	"-D") pushd "${COMPILEHOME}"
-	    cleanMeGood
-              popd ;;
-        "-a") pushd "${COMPILEHOME}"
+        "-d") pushd "${COMPILEHOME}" >/dev/null
+              cleanMe
+              popd >/dev/null ;;
+	"-D") pushd "${COMPILEHOME}" >/dev/null
+              cleanMeGood
+              popd >/dev/null ;;
+        "-a") pushd "${COMPILEHOME}" >/dev/null
               execMakeMe
-              popd ;;
-        "-e") pushd "${COMPILEHOME}" # Eventually changes to ${EMACSHOME}
-	      execMe
-              popd ;;
-        "-c") pushd "${COMPILEHOME}"
-	      configMe
-              popd ;; # Uses GTK3 with xwidgets
-        "-cg") pushd "${COMPILEHOME}"
-	      configMeGTK
-              popd ;;
-        "-cg2") pushd "${COMPILEHOME}"
-	      configMeGTK2
-              popd ;;
-        "-cl") pushd "${COMPILEHOME}"
-	      configMeLucid
-              popd ;;
-        "-cm") pushd "${COMPILEHOME}"
-	      configMeMotif
-              popd ;;
-        "-m") pushd "${COMPILEHOME}"
-	      makeMe
-              popd ;;
-        "-i") pushd "${COMPILEHOME}"
-	      installMe
-              popd ;;
-        "-r") pushd "${EMACSHOME}"
-	      runMe
-              popd ;;
-	"-u") pushd "${COMPILEHOME}"
-	      uninstallMe
-              popd ;;
+              popd >/dev/null ;;
+        "-e") pushd "${COMPILEHOME}" >/dev/null # Eventually changes to ${EMACSHOME}
+              execMe
+              popd >/dev/null ;;
+        "-c") pushd "${COMPILEHOME}" >/dev/null
+              configMe
+              popd >/dev/null ;; # Uses GTK3 with xwidgets
+        "-cg") pushd "${COMPILEHOME}" >/dev/null
+              configMeGTK
+              popd >/dev/null ;;
+        "-cg2") pushd "${COMPILEHOME}" >/dev/null
+              configMeGTK2
+              popd >/dev/null ;;
+        "-cl") pushd "${COMPILEHOME}" >/dev/null
+              configMeLucid
+              popd >/dev/null ;;
+        "-cm") pushd "${COMPILEHOME}" >/dev/null
+              configMeMotif
+              popd >/dev/null ;;
+        "-m") pushd "${COMPILEHOME}" >/dev/null
+              makeMe
+              popd >/dev/null ;;
+        "-i") pushd "${COMPILEHOME}" >/dev/null
+              installMe
+              popd >/dev/null ;;
+        "-r") pushd "${EMACSHOME}">/dev/null
+              runMe
+              popd >/dev/null ;;
+	"-u") pushd "${COMPILEHOME}" >/dev/null
+              uninstallMe
+              popd >/dev/null ;;
         # Find out what we have before
-        "-w") pushd "${COMPILEHOME}"
+        "-w") pushd "${COMPILEHOME}" >/dev/null
               whatMadeMe
-              popd ;;
+              popd >/dev/null ;;
         *) pushd "."
-	      helpMe ;;
+              helpMe ;;
     esac
 else # We don't have $1
     helpMe
