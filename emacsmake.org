@@ -368,6 +368,7 @@ copyMe() {
     if [[ -f ${EMACSHOME}/bin/emacs ]]; then
         EMACSTGT="$(readlink ${EMACSHOME}/bin/emacs)"
         echo "Linking ${EMACSHOME}/bin/${EMACSTGT} to ${EMACSHOME}/bin/${EMACSTGT}-${WMGR}"
+        # There should perhaps be a sudo/doas here
         cp -iv ${EMACSHOME}/bin/${EMACSTGT} ${EMACSHOME}/bin/${EMACSTGT}-${WMGR}
     else
         echo "$0: we couldn't find an emacs at ${EMACSHOME} or ${WMGR} isn't set."
@@ -393,6 +394,7 @@ installMe() {
     if [[ -z ${WMGR} ]]; then
         echo "No toolkit selected, you should probably have run emacsmake -c"
     fi
+    # There should perhaps be a sudo/doas here
     make install
     copyMe
 }
