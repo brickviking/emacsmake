@@ -13,6 +13,7 @@
 # v0.8.2 fixed docs for config with ugly hack.
 # v0.9 Planning install upgrade to symlink the emacs binary to emacs-${VER}-$[WMGR}
 # v0.10 Reworked all the pushd/popd to be quiet, by redirecting their output to /dev/null.
+# v0.11 Created new param to combine make and install, deliberately doesn't include config.
 #
 # TODO: rework for versions of Emacs earlier than 28.0.50, as there's no makefile until the
 #       configure phase. Still doesn't work for much earlier than 23 - 18.59 has no configure.
@@ -96,6 +97,7 @@ helpMe() {
     echo "   -cm  run ./configure with params ${CONFIGPARAMSMOTIF[@]}"
     echo "   -m   compile (no install), runs make"
     echo "   -i   install to ${EMACSHOME}, runs make install"
+    echo "   -mi  combines compile and install steps"
     echo "   -r   execute from ${EMACSHOME}, runs  with-emacs.sh -d "${EMACSCONFHOME}" -i quelpa-use-package "
     echo "   -u   uninstall from ${EMACSHOME}, runs make uninstall"
 }
@@ -330,6 +332,11 @@ elif [[ -n $1 ]]; then
               makeMe
               popd >/dev/null ;;
         "-i") pushd "${COMPILEHOME}" >/dev/null
+              installMe
+              popd >/dev/null ;;
+        # Let's do this all here
+        "-mi") pushd "${EMACSHOME}">/dev/null
+              makeMe
               installMe
               popd >/dev/null ;;
         "-r") pushd "${EMACSHOME}">/dev/null
