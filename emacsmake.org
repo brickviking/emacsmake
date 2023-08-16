@@ -544,7 +544,7 @@ elif [[ -n $1 ]]; then
               installMe
               popd >/dev/null ;;
         # Let's do this all here
-        "-mi") pushd "${EMACSHOME}">/dev/null
+        "-mi") pushd "${EMACSCOMPILEHOME}">/dev/null
               makeMe
               installMe
               popd >/dev/null ;;
