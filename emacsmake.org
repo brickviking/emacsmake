@@ -19,9 +19,8 @@ Changes can be made to the variables inside the script, which will help drive ho
 compiled, installed and executed.
 
 ,* Variables and requirements
-First off, you'll need to install the source code to Emacs, adjust
-=COMPILEHOME=. You can either fetch and extract a static tarball of
-the source, or you can access either of the git repositories.
+First off, you'll need to install the source code to Emacs, adjust =COMPILEHOME=. You can either
+fetch and extract a static tarball of the source, or you can access either of the git repositories.
 
 Because you're compiling Emacs, you can choose which libraries to compile Emacs with; adjust the
 =CONFIGPARAMS= array for this. You might want to check the output of =./configure --help= from
@@ -38,14 +37,14 @@ At the moment, this script will run Emacs using the =with-emacs.sh= script, avai
 https://github.com/alphapapa/with-emacs.sh - if you wish to run the compiled Emacs from anywhere not
 already on the user's =PATH=, you will want to either add the installation directory (of the Emacs
 binary): 
-#+BEGIN_QUOTE bash 
+,#+BEGIN_QUOTE bash 
 $ export PATH=${PATH}:${HOME}/bin/<new-location>/bin/emacs 
-#+END_QUOTE
+,#+END_QUOTE
 as an example, or edit =with-emacs.sh= suitably to run the Emacs binary from a new location. Don't
 forget to install the script somewhere on your =PATH=.
 
 To supply a different configuration directory to execute Emacs with, adjust EMACSCONFHOME. This will
-affect with-emacs.sh.
+affect the running of with-emacs.sh.
 
 ,* Future directions
 At this stage, I haven't got the foggiest idea what else I need, though I've already simplified this
@@ -110,6 +109,9 @@ The concept would be:
 
 (*) We need to tweak COMPILEHOME, EMACSHOME and CONFIGPARAMS. The other two (EMACSCONFHOME and
 EMACSRUNARGS) aren't needed for compiling, merely for running.
+
+Currently variables just get set to whatever made sense in the script, but there's no reason why we
+can't support env vars from the outside either.
 
 #+BEGIN_SRC bash -i
 #######################
