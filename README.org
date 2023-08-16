@@ -4,7 +4,7 @@ Changes can be made to the variables inside the script, which will help drive ho
 compiled, installed and executed.
 
 * Variables and requirements
-First off, you'll need to install the source code to Emacs, adjust =COMPILEHOME=. You can either
+First off, you'll need to install the source code to Emacs, adjust =EMACSCOMPILEHOME=. You can either
 fetch and extract a static tarball of the source, or you can access either of the git repositories.
 
 Because you're compiling Emacs, you can choose which libraries to compile Emacs with; adjust the

@@ -23,9 +23,9 @@
 # You WILL want to fiddle with these if you don't want the args I chose
 # This WILL break if the user running (EUID) isn't the same as the user owning the source directory
 # i.e. if there's no /root/src/c/emacs
-#COMPILEHOME="${HOME}/src/c/emacs" # Should be specific, not user-relative
+#EMACSCOMPILEHOME="${HOME}/src/c/emacs" # Should be specific, not user-relative
 
-COMPILEHOME="/h3/viking/src/c/hosts/gnu/emacs"
+EMACSCOMPILEHOME="/h3/viking/src/c/hosts/gnu/emacs"
 # Place to put Emacs (root of tree)
 # EMACSHOME="${HOME}/bin/emacs-playpen"
 EMACSHOME="/usr/local"
@@ -209,7 +209,7 @@ whatMadeMe() {
         done # for this in ${TOOLKIT}
         printf "Toolkit is: %s\n" ${WMGR}
     else
-        echo "I don't think you ran configure in ${COMPILEHOME}. Please rerun emacsmake with a -c parameter"
+        echo "I don't think you ran configure in ${EMACSCOMPILEHOME}. Please rerun emacsmake with a -c parameter"
         popd >/dev/null # just to keep the stack straight
         exit 1 # Shouldn't really exit here
     fi
@@ -301,37 +301,37 @@ if [[ -n $2 ]]; then # In short, if 2 or more args
 elif [[ -n $1 ]]; then
     case $1 in 
         "-h"|"--help"|"-?") helpMe ;;
-        "-d") pushd "${COMPILEHOME}" >/dev/null
+        "-d") pushd "${EMACSCOMPILEHOME}" >/dev/null
               cleanMe
               popd >/dev/null ;;
-	"-D") pushd "${COMPILEHOME}" >/dev/null
+	"-D") pushd "${EMACSCOMPILEHOME}" >/dev/null
               cleanMeGood
               popd >/dev/null ;;
-        "-a") pushd "${COMPILEHOME}" >/dev/null
+        "-a") pushd "${EMACSCOMPILEHOME}" >/dev/null
               execMakeMe
               popd >/dev/null ;;
-        "-e") pushd "${COMPILEHOME}" >/dev/null # Eventually changes to ${EMACSHOME}
+        "-e") pushd "${EMACSCOMPILEHOME}" >/dev/null # Eventually changes to ${EMACSHOME}
               execMe
               popd >/dev/null ;;
-        "-c") pushd "${COMPILEHOME}" >/dev/null
+        "-c") pushd "${EMACSCOMPILEHOME}" >/dev/null
               configMe
               popd >/dev/null ;; # Uses GTK3 with xwidgets
-        "-cg") pushd "${COMPILEHOME}" >/dev/null
+        "-cg") pushd "${EMACSCOMPILEHOME}" >/dev/null
               configMeGTK
               popd >/dev/null ;;
-        "-cg2") pushd "${COMPILEHOME}" >/dev/null
+        "-cg2") pushd "${EMACSCOMPILEHOME}" >/dev/null
               configMeGTK2
               popd >/dev/null ;;
-        "-cl") pushd "${COMPILEHOME}" >/dev/null
+        "-cl") pushd "${EMACSCOMPILEHOME}" >/dev/null
               configMeLucid
               popd >/dev/null ;;
-        "-cm") pushd "${COMPILEHOME}" >/dev/null
+        "-cm") pushd "${EMACSCOMPILEHOME}" >/dev/null
               configMeMotif
               popd >/dev/null ;;
-        "-m") pushd "${COMPILEHOME}" >/dev/null
+        "-m") pushd "${EMACSCOMPILEHOME}" >/dev/null
               makeMe
               popd >/dev/null ;;
-        "-i") pushd "${COMPILEHOME}" >/dev/null
+        "-i") pushd "${EMACSCOMPILEHOME}" >/dev/null
               installMe
               popd >/dev/null ;;
         # Let's do this all here
@@ -342,11 +342,11 @@ elif [[ -n $1 ]]; then
         "-r") pushd "${EMACSHOME}">/dev/null
               runMe
               popd >/dev/null ;;
-	"-u") pushd "${COMPILEHOME}" >/dev/null
+	"-u") pushd "${EMACSCOMPILEHOME}" >/dev/null
               uninstallMe
               popd >/dev/null ;;
         # Find out what we have before
-        "-w") pushd "${COMPILEHOME}" >/dev/null
+        "-w") pushd "${EMACSCOMPILEHOME}" >/dev/null
               whatMadeMe
               popd >/dev/null ;;
         *) pushd "."
