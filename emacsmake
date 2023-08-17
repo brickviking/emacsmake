@@ -34,7 +34,7 @@ EMACSCOMPILEHOME=${EMACSCOMPILEHOME:-"/h3/viking/src/c/hosts/gnu/emacs"}
 EMACSHOME=${EMACSHOME:-"/usr/local"}
 # Default, but check the configMe functions further down. Can't feed this in from user's env.
 # Emacs-23 doesn't have most of these options
-CONFIGPARAMS=(
+EMACSCONFIGPARAMS=(
     "--with-modules"
     "--with-imagemagick"
     "--with-cairo"
@@ -53,34 +53,34 @@ EMACSRUNARGS=(
 # Functions
 
 # Help function, usage(), ugly hack to put in toolkits
-CONFIGPARAMSGTK=(
+EMACSCONFIGPARAMSGTK=(
     "--with-modules"
     "--with-imagemagick"
     "--with-cairo"
     "--with-x-toolkit=gtk" # for completeness's sake
     "--prefix=${EMACSHOME}"
 )
-CONFIGPARAMSGTK2=(
+EMACSCONFIGPARAMSGTK2=(
     "--with-modules"
     "--with-imagemagick"
     "--with-cairo"
     "--with-x-toolkit=gtk2" # for completeness's sake
     "--prefix=${EMACSHOME}"
 )
-CONFIGPARAMSGTK3=(
+EMACSCONFIGPARAMSGTK3=(
     "--with-modules"
     "--with-imagemagick"
     "--with-cairo"
     "--with-xwidgets"
     "--with-x-toolkit=gtk3" # for completeness's sake
     "--prefix=${EMACSHOME}")
-CONFIGPARAMSLUCID=(
+EMACSCONFIGPARAMSLUCID=(
     "--with-modules"
     "--with-imagemagick"
     "--with-cairo"
     "--with-x-toolkit=lucid"
     "--prefix=${EMACSHOME}")
-CONFIGPARAMSMOTIF=(
+EMACSCONFIGPARAMSMOTIF=(
     "--with-modules"
     "--with-imagemagick"
     "--with-cairo"
@@ -95,11 +95,11 @@ helpMe() {
     echo "   -a   Runs  every step except execute"
     echo "   -e   run every step; distclean, configure, make, install, run"
     echo "        default Emacs binary location is ${EMACSHOME}"
-    echo "   -c   run ./configure with params ${CONFIGPARAMS[@]}"
-    echo "   -cg  run ./configure with params ${CONFIGPARAMSGTK[@]}"
-    echo "   -cg2 run ./configure with params ${CONFIGPARAMSGTK2[@]}"
-    echo "   -cl  run ./configure with params ${CONFIGPARAMSLUCID[@]}"
-    echo "   -cm  run ./configure with params ${CONFIGPARAMSMOTIF[@]}"
+    echo "   -c   run ./configure with params ${EMACSCONFIGPARAMS[@]}"
+    echo "   -cg  run ./configure with params ${EMACSCONFIGPARAMSGTK[@]}"
+    echo "   -cg2 run ./configure with params ${EMACSCONFIGPARAMSGTK2[@]}"
+    echo "   -cl  run ./configure with params ${EMACSCONFIGPARAMSLUCID[@]}"
+    echo "   -cm  run ./configure with params ${EMACSCONFIGPARAMSMOTIF[@]}"
     echo "   -m   compile (no install), runs make"
     echo "   -i   install to ${EMACSHOME}, runs make install"
     echo "   -mi  combines compile and install steps"
@@ -130,31 +130,31 @@ cleanMeGood() {
 
 # Runs configure phase
 configMe() { # This just does GTK3, other command switches toggle
-    ./configure "${CONFIGPARAMS[@]}"
+    ./configure "${EMACSCONFIGPARAMS[@]}"
 }
 
 # Should support the GTK1 crowd but here, just grabs gtk3
 configMeGTK() {
-CONFIGPARAMS=(
+EMACSCONFIGPARAMS=(
     "--with-modules"
     "--with-imagemagick"
     "--with-cairo"
     "--with-x-toolkit=gtk"
     "--prefix=${EMACSHOME}" )
     WMGR=gtk # (might be gtk3)
-    ./configure "${CONFIGPARAMS[@]}"
+    ./configure "${EMACSCONFIGPARAMS[@]}"
 }
 
 # Should support the GTK2 crowd too
 configMeGTK2() {
-CONFIGPARAMS=(
+EMACSCONFIGPARAMS=(
     "--with-modules"
     "--with-imagemagick"
     "--with-cairo"
     "--with-x-toolkit=gtk2"
     "--prefix=${EMACSHOME}" )
     WMGR=gtk2
-    ./configure "${CONFIGPARAMS[@]}"
+    ./configure "${EMACSCONFIGPARAMS[@]}"
 }
 
 
@@ -165,26 +165,26 @@ configMeGtk3() {
 
 # Choose this if you never installed gtk - crazy, huh?
 configMeLucid() {
-CONFIGPARAMS=(
+EMACSCONFIGPARAMS=(
     "--with-modules"
     "--with-imagemagick"
     "--with-cairo"
     "--with-x-toolkit=lucid"
     "--prefix=${EMACSHOME}" )
     WMGR=lucid
-    ./configure "${CONFIGPARAMS[@]}"
+    ./configure "${EMACSCONFIGPARAMS[@]}"
 }
 
 # Choose this if you actually have a Motif or LessTif
 configMeMotif() {
-CONFIGPARAMS=(
+EMACSCONFIGPARAMS=(
     "--with-modules"
     "--with-imagemagick"
     "--with-cairo"
     "--with-x-toolkit=motif"
     "--prefix=${EMACSHOME}" )
     WMGR=motif
-    ./configure "${CONFIGPARAMS[@]}"
+    ./configure "${EMACSCONFIGPARAMS[@]}"
 }
 
 # Runs make (hopefully we ran configure first)

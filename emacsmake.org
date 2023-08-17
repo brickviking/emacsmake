@@ -23,7 +23,7 @@ First off, you'll need to install the source code to Emacs, adjust =EMACSCOMPILE
 fetch and extract a static tarball of the source, or you can access either of the git repositories.
 
 Because you're compiling Emacs, you can choose which libraries to compile Emacs with; adjust the
-=CONFIGPARAMS= array for this. You might want to check the output of =./configure --help= from
+=EMACSCONFIGPARAMS= array for this. You might want to check the output of =./configure --help= from
 within the source directory to see what parameters are supported. This will include choosing the
 place to put the compiled version of Emacs, adjust =EMACSHOME=. Note that this is the root of the
 tree where the whole of Emacs will eventually live, not the location of the Emacs binary
@@ -98,7 +98,7 @@ so that calling this from sudo doesn't bork with messages such as:
 Anyhow, there are some other tweakable values here which make sense except perhaps the playpen,
 which ends up being my own personal settings testbed, so I don't blow away my main configuration.
 
-Another thought—we could perhaps pull in our CONFIGPARAMS from a created-at-first-run file.
+Another thought—we could perhaps pull in our EMACSCONFIGPARAMS from a created-at-first-run file.
 The concept would be:
 + If we don't have a defaults file already
   + prompt user for "Choose, or defaults" (*)
@@ -108,7 +108,7 @@ The concept would be:
   + if so, select other defaults
   + write file back (for next time)
 
-(*) We need to tweak EMACSCOMPILEHOME, EMACSHOME and CONFIGPARAMS. The other two (EMACSCONFHOME and
+(*) We need to tweak EMACSCOMPILEHOME, EMACSHOME and EMACSCONFIGPARAMS. The other two (EMACSCONFHOME and
 EMACSRUNARGS) aren't needed for compiling, merely for running.
 
 Currently variables just get set to whatever made sense in the script, but there's no reason why we
@@ -130,7 +130,7 @@ EMACSCOMPILEHOME=${EMACSCOMPILEHOME:-"/h3/viking/src/c/hosts/gnu/emacs"}
 EMACSHOME=${EMACSHOME:-"/usr/local"}
 # Default, but check the configMe functions further down. Can't feed this in from user's env.
 # Emacs-23 doesn't have most of these options
-CONFIGPARAMS=(
+EMACSCONFIGPARAMS=(
     "--with-modules"
     "--with-imagemagick"
     "--with-cairo"
@@ -149,7 +149,7 @@ EMACSRUNARGS=(
 ** Functions
 *** Help function
 
-The boilerplate help just in case I forgot what switches I coded. Uses UNIX syntax (-x) not Microsoft (/x). There's also a slight bug with CONFIGPARAMS
+The boilerplate help just in case I forgot what switches I coded. Uses UNIX syntax (-x) not Microsoft (/x). There's also a slight bug with EMACSCONFIGPARAMS
 if I decide I want to show non-default window toolkits. So far I've added
 gtk, gtk2, gtk3 (the default), lucid and Motif toolkits. I haven't bothered
 with -nw, as I'm always on a desktop with an Xorg server running.
@@ -159,34 +159,34 @@ with -nw, as I'm always on a desktop with an Xorg server running.
 # Functions
 
 # Help function, usage(), ugly hack to put in toolkits
-CONFIGPARAMSGTK=(
+EMACSCONFIGPARAMSGTK=(
     "--with-modules"
     "--with-imagemagick"
     "--with-cairo"
     "--with-x-toolkit=gtk" # for completeness's sake
     "--prefix=${EMACSHOME}"
 )
-CONFIGPARAMSGTK2=(
+EMACSCONFIGPARAMSGTK2=(
     "--with-modules"
     "--with-imagemagick"
     "--with-cairo"
     "--with-x-toolkit=gtk2" # for completeness's sake
     "--prefix=${EMACSHOME}"
 )
-CONFIGPARAMSGTK3=(
+EMACSCONFIGPARAMSGTK3=(
     "--with-modules"
     "--with-imagemagick"
     "--with-cairo"
     "--with-xwidgets"
     "--with-x-toolkit=gtk3" # for completeness's sake
     "--prefix=${EMACSHOME}")
-CONFIGPARAMSLUCID=(
+EMACSCONFIGPARAMSLUCID=(
     "--with-modules"
     "--with-imagemagick"
     "--with-cairo"
     "--with-x-toolkit=lucid"
     "--prefix=${EMACSHOME}")
-CONFIGPARAMSMOTIF=(
+EMACSCONFIGPARAMSMOTIF=(
     "--with-modules"
     "--with-imagemagick"
     "--with-cairo"
@@ -201,11 +201,11 @@ helpMe() {
     echo "   -a   Runs  every step except execute"
     echo "   -e   run every step; distclean, configure, make, install, run"
     echo "        default Emacs binary location is ${EMACSHOME}"
-    echo "   -c   run ./configure with params ${CONFIGPARAMS[@]}"
-    echo "   -cg  run ./configure with params ${CONFIGPARAMSGTK[@]}"
-    echo "   -cg2 run ./configure with params ${CONFIGPARAMSGTK2[@]}"
-    echo "   -cl  run ./configure with params ${CONFIGPARAMSLUCID[@]}"
-    echo "   -cm  run ./configure with params ${CONFIGPARAMSMOTIF[@]}"
+    echo "   -c   run ./configure with params ${EMACSCONFIGPARAMS[@]}"
+    echo "   -cg  run ./configure with params ${EMACSCONFIGPARAMSGTK[@]}"
+    echo "   -cg2 run ./configure with params ${EMACSCONFIGPARAMSGTK2[@]}"
+    echo "   -cl  run ./configure with params ${EMACSCONFIGPARAMSLUCID[@]}"
+    echo "   -cm  run ./configure with params ${EMACSCONFIGPARAMSMOTIF[@]}"
     echo "   -m   compile (no install), runs make"
     echo "   -i   install to ${EMACSHOME}, runs make install"
     echo "   -mi  combines compile and install steps"
@@ -255,31 +255,31 @@ preinstalled configure somewhere in the ${PATH}.
 #+BEGIN_SRC bash -i
 # Runs configure phase
 configMe() { # This just does GTK3, other command switches toggle
-    ./configure "${CONFIGPARAMS[@]}"
+    ./configure "${EMACSCONFIGPARAMS[@]}"
 }
 
 # Should support the GTK1 crowd but here, just grabs gtk3
 configMeGTK() {
-CONFIGPARAMS=(
+EMACSCONFIGPARAMS=(
     "--with-modules"
     "--with-imagemagick"
     "--with-cairo"
     "--with-x-toolkit=gtk"
     "--prefix=${EMACSHOME}" )
     WMGR=gtk # (might be gtk3)
-    ./configure "${CONFIGPARAMS[@]}"
+    ./configure "${EMACSCONFIGPARAMS[@]}"
 }
 
 # Should support the GTK2 crowd too
 configMeGTK2() {
-CONFIGPARAMS=(
+EMACSCONFIGPARAMS=(
     "--with-modules"
     "--with-imagemagick"
     "--with-cairo"
     "--with-x-toolkit=gtk2"
     "--prefix=${EMACSHOME}" )
     WMGR=gtk2
-    ./configure "${CONFIGPARAMS[@]}"
+    ./configure "${EMACSCONFIGPARAMS[@]}"
 }
 
 
@@ -290,26 +290,26 @@ configMeGtk3() {
 
 # Choose this if you never installed gtk - crazy, huh?
 configMeLucid() {
-CONFIGPARAMS=(
+EMACSCONFIGPARAMS=(
     "--with-modules"
     "--with-imagemagick"
     "--with-cairo"
     "--with-x-toolkit=lucid"
     "--prefix=${EMACSHOME}" )
     WMGR=lucid
-    ./configure "${CONFIGPARAMS[@]}"
+    ./configure "${EMACSCONFIGPARAMS[@]}"
 }
 
 # Choose this if you actually have a Motif or LessTif
 configMeMotif() {
-CONFIGPARAMS=(
+EMACSCONFIGPARAMS=(
     "--with-modules"
     "--with-imagemagick"
     "--with-cairo"
     "--with-x-toolkit=motif"
     "--prefix=${EMACSHOME}" )
     WMGR=motif
-    ./configure "${CONFIGPARAMS[@]}"
+    ./configure "${EMACSCONFIGPARAMS[@]}"
 }
 
 #+END_SRC
