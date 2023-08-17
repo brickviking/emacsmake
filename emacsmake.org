@@ -81,6 +81,7 @@ earlier versions (13-18.58) predated the autoconf software suite which wasn't re
 # v0.9 Planning install upgrade to symlink the emacs binary to emacs-${VER}-$[WMGR}
 # v0.10 Reworked all the pushd/popd to be quiet, by redirecting their output to /dev/null.
 # v0.11 Created new param to combine make and install, deliberately doesn't include config.
+# v0.12 Begin process of pulling in vars from environment if already provided.
 #
 # TODO: rework for versions of Emacs earlier than 28.0.50, as there's no makefile until the
 #       configure phase. Still doesn't work for much earlier than 23 - 18.59 has no configure.
@@ -121,11 +122,14 @@ can't support env vars from the outside either.
 # i.e. if there's no /root/src/c/emacs
 #EMACSCOMPILEHOME="${HOME}/src/c/emacs" # Should be specific, not user-relative
 
-EMACSCOMPILEHOME="/h3/viking/src/c/hosts/gnu/emacs"
+# Provide for the option to feed these vars in from the outside
+# and allows us to pull in from somewhere else
+EMACSCOMPILEHOME=${EMACSCOMPILEHOME:-"/h3/viking/src/c/hosts/gnu/emacs"}
 # Place to put Emacs (root of tree)
 # EMACSHOME="${HOME}/bin/emacs-playpen"
-EMACSHOME="/usr/local"
-# Default, but check the configMe functions further down
+EMACSHOME=${EMACSHOME:-"/usr/local"}
+# Default, but check the configMe functions further down. Can't feed this in from user's env.
+# Emacs-23 doesn't have most of these options
 CONFIGPARAMS=(
     "--with-modules"
     "--with-imagemagick"
@@ -133,6 +137,7 @@ CONFIGPARAMS=(
     "--with-xwidgets"
     "--with-x-toolkit=gtk3" # for completeness's sake
     "--prefix=${EMACSHOME}" )
+# Default X toolkit if we don't change it with a -c{g2,l,m} option
 WMGR=gtk3
 # This gets used to run with-emacs.sh with custom directory
 EMACSCONFHOME="${HOME}/.emacs-playpen"
