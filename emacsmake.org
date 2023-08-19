@@ -254,7 +254,8 @@ preinstalled configure somewhere in the ${PATH}.
 
 #+BEGIN_SRC bash -i
 # Runs configure phase, runs autogen if configure isn't here already
-configMe() { # This just does GTK3, other command switches toggle
+# This just does GTK3 unless EMACSCONFIGPARAMS[] is changed from a calling function
+configMe() { 
     if [[ -f ./configure ]]; then
         ./configure "${EMACSCONFIGPARAMS[@]}"
     else
