@@ -253,9 +253,14 @@ I learned to specify the location of the configure directly, so I don't accident
 preinstalled configure somewhere in the ${PATH}.
 
 #+BEGIN_SRC bash -i
-# Runs configure phase
+# Runs configure phase, runs autogen if configure isn't here already
 configMe() { # This just does GTK3, other command switches toggle
-    ./configure "${EMACSCONFIGPARAMS[@]}"
+    if [[ -f ./configure ]]; then
+        ./configure "${EMACSCONFIGPARAMS[@]}"
+    else
+        ./autogen.sh
+        ./configure "${EMACSCONFIGPARAMS[@]}"
+    fi   
 }
 
 # Should support the GTK1 crowd but here, just grabs gtk3
@@ -312,6 +317,11 @@ EMACSCONFIGPARAMS=(
     ./configure "${EMACSCONFIGPARAMS[@]}"
 }
 
+# You'll need this if the autogen.sh hasn't been run to get us a configure script
+# We should also make sure we run this in exactly the right place.
+runAutogen() {
+    ./autogen.sh
+}
 #+END_SRC
 
 *** Make command
