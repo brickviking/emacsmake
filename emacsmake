@@ -128,9 +128,19 @@ cleanMeGood() {
     fi
 }
 
-# Runs configure phase
-configMe() { # This just does GTK3, other command switches toggle
-    ./configure "${EMACSCONFIGPARAMS[@]}"
+# Runs configure phase, runs autogen if configure isn't here already
+# This just does GTK3 unless EMACSCONFIGPARAMS[] is changed from a calling function
+configMe() {
+    if [[ -f ./configure ]]; then
+        ./configure "${EMACSCONFIGPARAMS[@]}"
+    else
+        ./autogen.sh # fails if autotools not installed
+        if [[ ! -f configure ]]; then
+            echo "Failed to create configure, do you have autotools installed?"
+        else
+            ./configure "${EMACSCONFIGPARAMS[@]}"
+        fi
+    fi
 }
 
 # Should support the GTK1 crowd but here, just grabs gtk3
@@ -142,7 +152,7 @@ EMACSCONFIGPARAMS=(
     "--with-x-toolkit=gtk"
     "--prefix=${EMACSHOME}" )
     WMGR=gtk # (might be gtk3)
-    ./configure "${EMACSCONFIGPARAMS[@]}"
+    configMe
 }
 
 # Should support the GTK2 crowd too
@@ -154,7 +164,7 @@ EMACSCONFIGPARAMS=(
     "--with-x-toolkit=gtk2"
     "--prefix=${EMACSHOME}" )
     WMGR=gtk2
-    ./configure "${EMACSCONFIGPARAMS[@]}"
+    configMe
 }
 
 
@@ -172,7 +182,7 @@ EMACSCONFIGPARAMS=(
     "--with-x-toolkit=lucid"
     "--prefix=${EMACSHOME}" )
     WMGR=lucid
-    ./configure "${EMACSCONFIGPARAMS[@]}"
+    configMe
 }
 
 # Choose this if you actually have a Motif or LessTif
@@ -184,7 +194,7 @@ EMACSCONFIGPARAMS=(
     "--with-x-toolkit=motif"
     "--prefix=${EMACSHOME}" )
     WMGR=motif
-    ./configure "${EMACSCONFIGPARAMS[@]}"
+    configMe
 }
 
 # Runs make (hopefully we ran configure first)
