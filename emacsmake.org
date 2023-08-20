@@ -152,7 +152,7 @@ EMACSCONFIGPARAMS=(
     "--with-xwidgets"
     "--with-x-toolkit=gtk3" # for completeness's sake
     "--prefix=${EMACSHOME}" )
-# Default X toolkit if we don't change it with a -c{g2,l,m} option
+# Default X toolkit if we don't change it with a -c{g2,l,m,n} option
 WMGR=gtk3
 # This gets used to run with-emacs.sh with custom directory
 EMACSCONFHOME="${HOME}/.emacs-playpen"
