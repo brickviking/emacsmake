@@ -15,6 +15,7 @@
 # v0.10 Reworked all the pushd/popd to be quiet, by redirecting their output to /dev/null.
 # v0.11 Created new param to combine make and install, deliberately doesn't include config.
 # v0.12 Begin process of pulling in vars from environment if already provided.
+# v0.13 Now we've got the main x-toolkit targets, how about --without-x?
 #
 # TODO: rework for versions of Emacs earlier than 28.0.50, as there's no makefile until the
 #       configure phase. Still doesn't work for much earlier than 23 - 18.59 has no configure.
@@ -86,6 +87,10 @@ EMACSCONFIGPARAMSMOTIF=(
     "--with-cairo"
     "--with-x-toolkit=motif"
     "--prefix=${EMACSHOME}")
+EMACSCONFIGPARAMSNOX=( # You know I just had to do it
+    "--with-modules"
+    "--without-x"
+    "--prefix=${EMACSHOME}")
 
 helpMe() {
     echo "$0: Emacs recompiler script"
@@ -100,6 +105,7 @@ helpMe() {
     echo "   -cg2 run ./configure with params ${EMACSCONFIGPARAMSGTK2[@]}"
     echo "   -cl  run ./configure with params ${EMACSCONFIGPARAMSLUCID[@]}"
     echo "   -cm  run ./configure with params ${EMACSCONFIGPARAMSMOTIF[@]}"
+    echo "   -cn  run ./configure with params ${EMACSCONFIGPARAMSNOX[@]}"
     echo "   -m   compile (no install), runs make"
     echo "   -i   install to ${EMACSHOME}, runs make install"
     echo "   -mi  combines compile and install steps"
@@ -197,6 +203,16 @@ EMACSCONFIGPARAMS=(
     configMe
 }
 
+# Choose this if you don't want an Emacs with X (creates emacs-nox)
+configMeNoX() {
+EMACSCONFIGPARAMS=(
+    "--with-modules"
+    "--without-x"
+    "--prefix=${EMACSHOME}" )
+    WMGR=nox
+    configMe
+}
+
 # Runs make (hopefully we ran configure first)
 makeMe() {
     if [[ -f Makefile ]]; then
@@ -220,6 +236,7 @@ whatMadeMe() {
                 "--with-x-toolkit=gtk3") WMGR=gtk3 ;;
                 "--with-x-toolkit=lucid") WMGR=lucid ;;
                 "--with-x-toolkit=motif") WMGR=motif ;;
+                "--without-x") WMGR=nox ;;
             esac # We can simply ignore everything else
         done # for this in ${TOOLKIT}
         printf "Toolkit is: %s\n" ${WMGR}
@@ -253,7 +270,7 @@ installMe() {
     # First, find out what we made from what's been left behind in the last compile
     whatMadeMe
     if [[ -z ${WMGR} ]]; then
-        echo "No toolkit selected, you should probably have run emacsmake -c"
+        echo "No toolkit selected (not even -nox), you should probably have run emacsmake -c"
     fi
     # There should perhaps be a sudo/doas here
     sudo make install
@@ -342,6 +359,9 @@ elif [[ -n $1 ]]; then
               popd >/dev/null ;;
         "-cm") pushd "${EMACSCOMPILEHOME}" >/dev/null
               configMeMotif
+              popd >/dev/null ;;
+        "-cn") pushd "${EMACSCOMPILEHOME}" >/dev/null
+              configMeNoX
               popd >/dev/null ;;
         "-m") pushd "${EMACSCOMPILEHOME}" >/dev/null
               makeMe
