@@ -22,6 +22,21 @@ compiled, installed and executed.
 First off, you'll need to install the source code to Emacs, adjust =EMACSCOMPILEHOME=. You can either
 fetch and extract a static tarball of the source, or you can access either of the git repositories.
 
+Tarballs are usually a fixed point in the stage of emacs development, but git repositories have
+multiple threads of development, meaning there's a requirement to select the correct one if you
+don't simply want to use the latest available code, often labeled the master branch. This is always
+a moving target, so people often select a version branch, or perhaps a specific point in one of
+those branches, such as an official release point.
+
+Tarballs are created at these points, making them useful for snapshots where nothing much will
+change in the future. It also means there's no expected future additions to that development unless
+you make the effort to update on a regular basis.
+
+If you grab code from the git repositories, be aware that there are multiple branches of emacs code
+that you can build, so check out what's available for compiling, select one, and you'll be off. You
+will of course need to know how to use git, and how to select the correct branch of emacs to
+compile.
+
 Because you're compiling Emacs, you can choose which libraries to compile Emacs with; adjust the
 =EMACSCONFIGPARAMS= array for this. You might want to check the output of =./configure --help= from
 within the source directory to see what parameters are supported. This will include choosing the
@@ -30,7 +45,6 @@ tree where the whole of Emacs will eventually live, not the location of the Emac
 itself. Usually directories will be created below this point for the libraries, the binaries and the
 compiled lisp code to live. The usual place that is selected if you don't specify it would be
 =/usr/local=, just as with a lot of other configure-based build systems.
-
 
 ,* Executing Emacs
 At the moment, this script will run Emacs using the =with-emacs.sh= script, available from
