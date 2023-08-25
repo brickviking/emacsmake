@@ -37,12 +37,13 @@ EMACSHOME=${EMACSHOME:-"/usr/local"}
 # Emacs-23 doesn't have most of these options
 EMACSCONFIGPARAMS=(
     "--with-modules"
+    "--with-tree-sitter"
     "--with-imagemagick"
     "--with-cairo"
     "--with-xwidgets"
     "--with-x-toolkit=gtk3" # for completeness's sake
     "--prefix=${EMACSHOME}" )
-# Default X toolkit if we don't change it with a -c{g2,l,m} option
+# Default X toolkit if we don't change it with a -c{g2,l,m,n} option
 WMGR=gtk3
 # This gets used to run with-emacs.sh with custom directory
 EMACSCONFHOME="${HOME}/.emacs-playpen"
@@ -56,6 +57,7 @@ EMACSRUNARGS=(
 # Help function, usage(), ugly hack to put in toolkits
 EMACSCONFIGPARAMSGTK=(
     "--with-modules"
+    "--with-tree-sitter"
     "--with-imagemagick"
     "--with-cairo"
     "--with-x-toolkit=gtk" # for completeness's sake
@@ -63,6 +65,7 @@ EMACSCONFIGPARAMSGTK=(
 )
 EMACSCONFIGPARAMSGTK2=(
     "--with-modules"
+    "--with-tree-sitter"
     "--with-imagemagick"
     "--with-cairo"
     "--with-x-toolkit=gtk2" # for completeness's sake
@@ -70,6 +73,7 @@ EMACSCONFIGPARAMSGTK2=(
 )
 EMACSCONFIGPARAMSGTK3=(
     "--with-modules"
+    "--with-tree-sitter"
     "--with-imagemagick"
     "--with-cairo"
     "--with-xwidgets"
@@ -77,18 +81,21 @@ EMACSCONFIGPARAMSGTK3=(
     "--prefix=${EMACSHOME}")
 EMACSCONFIGPARAMSLUCID=(
     "--with-modules"
+    "--with-tree-sitter"
     "--with-imagemagick"
     "--with-cairo"
     "--with-x-toolkit=lucid"
     "--prefix=${EMACSHOME}")
 EMACSCONFIGPARAMSMOTIF=(
     "--with-modules"
+    "--with-tree-sitter"
     "--with-imagemagick"
     "--with-cairo"
     "--with-x-toolkit=motif"
     "--prefix=${EMACSHOME}")
 EMACSCONFIGPARAMSNOX=( # You know I just had to do it
     "--with-modules"
+    "--with-tree-sitter"
     "--without-x"
     "--prefix=${EMACSHOME}")
 
@@ -153,6 +160,7 @@ configMe() {
 configMeGTK() {
 EMACSCONFIGPARAMS=(
     "--with-modules"
+    "--with-tree-sitter"
     "--with-imagemagick"
     "--with-cairo"
     "--with-x-toolkit=gtk"
@@ -165,6 +173,7 @@ EMACSCONFIGPARAMS=(
 configMeGTK2() {
 EMACSCONFIGPARAMS=(
     "--with-modules"
+    "--with-tree-sitter"
     "--with-imagemagick"
     "--with-cairo"
     "--with-x-toolkit=gtk2"
@@ -183,6 +192,7 @@ configMeGtk3() {
 configMeLucid() {
 EMACSCONFIGPARAMS=(
     "--with-modules"
+    "--with-tree-sitter"
     "--with-imagemagick"
     "--with-cairo"
     "--with-x-toolkit=lucid"
@@ -195,6 +205,7 @@ EMACSCONFIGPARAMS=(
 configMeMotif() {
 EMACSCONFIGPARAMS=(
     "--with-modules"
+    "--with-tree-sitter"
     "--with-imagemagick"
     "--with-cairo"
     "--with-x-toolkit=motif"
@@ -207,6 +218,7 @@ EMACSCONFIGPARAMS=(
 configMeNoX() {
 EMACSCONFIGPARAMS=(
     "--with-modules"
+    "--with-tree-sitter"
     "--without-x"
     "--prefix=${EMACSHOME}" )
     WMGR=nox
