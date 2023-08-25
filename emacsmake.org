@@ -37,14 +37,19 @@ that you can build, so check out what's available for compiling, select one, and
 will of course need to know how to use git, and how to select the correct branch of emacs to
 compile.
 
+'** Compile requirements
 Because you're compiling Emacs, you can choose which libraries to compile Emacs with; adjust the
 =EMACSCONFIGPARAMS= array for this. You might want to check the output of =./configure --help= from
-within the source directory to see what parameters are supported. This will include choosing the
-place to put the compiled version of Emacs, adjust =EMACSHOME=. Note that this is the root of the
-tree where the whole of Emacs will eventually live, not the location of the Emacs binary
-itself. Usually directories will be created below this point for the libraries, the binaries and the
-compiled lisp code to live. The usual place that is selected if you don't specify it would be
-=/usr/local=, just as with a lot of other configure-based build systems.
+within the source directory to see what parameters are supported.
+
+This will include choosing the place to put the compiled version of Emacs, adjust =EMACSHOME=. Note
+that this is the root of the tree where the whole of Emacs will eventually live, not the location of
+the Emacs binary itself. Usually directories will be created below this point for the libraries, the
+binaries and the compiled lisp code to live. The usual place that is selected if you don't specify
+it would be =/usr/local=, just as with a lot of other configure-based build systems.
+
+If you're also going to compile with support for other things such as libjansson, then make sure the 
+required -dev/-devel packages are also installed.
 
 ,* Executing Emacs
 At the moment, this script will run Emacs using the =with-emacs.sh= script, available from
