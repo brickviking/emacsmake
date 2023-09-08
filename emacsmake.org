@@ -229,7 +229,10 @@ helpMe() {
     echo "   -h   help (this text)"
     echo "   -d   Runs 'make distclean'"
     echo "   -D   Runs 'make maintainer-clean'"
-    echo "   -a   Runs  every step except execute"
+    echo "   -g   Runs a 'git pull' from the top of the tree"
+    echo "   -p   patch sourcetree from patch files in patches/ directory"
+    echo "        This takes NO account of already-patched files"
+    echo "   -a   Runs configure, make and install - will make gtk3 client"
     echo "   -e   run every step; distclean, configure, make, install, run"
     echo "        default Emacs binary location is ${EMACSHOME}"
     echo "   -c   run ./configure with params ${EMACSCONFIGPARAMS[@]}"
@@ -244,6 +247,47 @@ helpMe() {
     echo "   -r   execute from ${EMACSHOME}, runs  with-emacs.sh -d "${EMACSCONFHOME}" -i quelpa-use-package "
     echo "   -u   uninstall from ${EMACSHOME}, runs make uninstall"
 }
+#+END_SRC
+
+*** Update source tree with git
+
+I had seriously considered this, but I can't even guarantee I'll stick just with emacs-29, and
+I don't really know how to propagate that through the build scripts that depend on it, so I'm
+shelving the idea for now at least.
+
+I would ordinarily have run =emacsmake -d= initially, followed by a call out to git pull, and
+then the remainder of this script can just continue on. One other thing is that if I wanted to
+apply patches before I started configuring, my script would also have to handle that too. What
+a headache!
+
+Well, I guess I can put git into practice, though I'm not sure exactly how to retain branch yet.
+Patching (of course) will generally be up to the user anyhow. This will just run "git pull".
+We should run make distclean first before we git pull. Unfortunately, this doesn't handle
+patched-already files.
+
+#+BEGIN_SRC bash -i
+# This can generally update the git tree in the manner prescribed by the user.
+gitMe() {
+    make distclean # This just makes sure that we have no stray files left lying around
+    git pull # This doesn't take account of patch files already applied.
+}
+
+#+END_SRC
+
+*** Patching
+I have a very small patch in place at the moment for upyoursgrandma.patch, the other patch
+I'll leave out for the moment.
+
+#+BEGIN_SRC bash -i
+# This can generally patch the source tree in the manner prescribed by the user.
+# Leave suitable patches in the patches/ directory.
+# This does not take account of already-patched files. Beware.
+patchMe() {
+    for t in patches/*.patch; do
+       patch -p1<${t}
+    done
+}
+
 #+END_SRC
 
 *** Cleaning scripts distclean/maintainer-clean
@@ -578,6 +622,12 @@ elif [[ -n $1 ]]; then
               popd >/dev/null ;;
 	"-D") pushd "${EMACSCOMPILEHOME}" >/dev/null
               cleanMeGood
+              popd >/dev/null ;;
+        "-g") pushd "${EMACSCOMPILEHOME}" >/dev/null
+              gitMe
+              popd >/dev/null ;;
+        "-p") pushd "${EMACSCOMPILEHOME}" >/dev/null
+              patchMe
               popd >/dev/null ;;
         "-a") pushd "${EMACSCOMPILEHOME}" >/dev/null
               execMakeMe

@@ -104,7 +104,10 @@ helpMe() {
     echo "   -h   help (this text)"
     echo "   -d   Runs 'make distclean'"
     echo "   -D   Runs 'make maintainer-clean'"
-    echo "   -a   Runs  every step except execute"
+    echo "   -g   Runs a 'git pull' from the top of the tree"
+    echo "   -p   patch sourcetree from patch files in patches/ directory"
+    echo "        This takes NO account of already-patched files"
+    echo "   -a   Runs configure, make and install - will make gtk3 client"
     echo "   -e   run every step; distclean, configure, make, install, run"
     echo "        default Emacs binary location is ${EMACSHOME}"
     echo "   -c   run ./configure with params ${EMACSCONFIGPARAMS[@]}"
@@ -118,6 +121,21 @@ helpMe() {
     echo "   -mi  combines compile and install steps"
     echo "   -r   execute from ${EMACSHOME}, runs  with-emacs.sh -d "${EMACSCONFHOME}" -i quelpa-use-package "
     echo "   -u   uninstall from ${EMACSHOME}, runs make uninstall"
+}
+
+# This can generally update the git tree in the manner prescribed by the user.
+gitMe() {
+    make distclean # This just makes sure that we have no stray files left lying around
+    git pull # This doesn't take account of patch files already applied.
+}
+
+# This can generally patch the source tree in the manner prescribed by the user.
+# Leave suitable patches in the patches/ directory.
+# This does not take account of already-patched files. Beware.
+patchMe() {
+    for t in patches/*.patch; do
+       patch -p1<${t}
+    done
 }
 
 # Runs make distclean, but only if the configure step had created one.
@@ -350,6 +368,12 @@ elif [[ -n $1 ]]; then
               popd >/dev/null ;;
 	"-D") pushd "${EMACSCOMPILEHOME}" >/dev/null
               cleanMeGood
+              popd >/dev/null ;;
+        "-g") pushd "${EMACSCOMPILEHOME}" >/dev/null
+              gitMe
+              popd >/dev/null ;;
+        "-p") pushd "${EMACSCOMPILEHOME}" >/dev/null
+              patchMe
               popd >/dev/null ;;
         "-a") pushd "${EMACSCOMPILEHOME}" >/dev/null
               execMakeMe
