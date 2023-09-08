@@ -9,11 +9,6 @@
 This is a simple script to create Emacs from its source code. About the only thing missing from
 this is a licence, I haven't come up with a usable licence yet.
 
-* Table of contents
-  :PROPERTIES:
-  :TOC:      :include all :depth 3
-  :END:
-
 :CONTENTS:
 - [[#readme-in-org-format][Readme, in org format]]
 - [[#main-file][Main file]]
@@ -39,6 +34,7 @@ this is a licence, I haven't come up with a usable licence yet.
 * Readme, in org format
   :PROPERTIES:
   :header-args: org :tangle README.org
+  :TOC:      :include all :depth 3
   :END:
 
 #+BEGIN_SRC org -i
