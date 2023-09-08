@@ -3,19 +3,39 @@
 #+EMAIL: brickviking@gmail.com
 
 * Introduction
+  :PROPERTIES:
+  :END:
+
 This is a simple script to create Emacs from its source code. About the only thing missing from
 this is a licence, I haven't come up with a usable licence yet.
 
 
-:CONTENTS:
-
-:END:
 * Readme, in org format
   :PROPERTIES:
   :header-args: org :tangle README.org
   :TOC:      :include all :depth 3
   :END:
 
+:CONTENTS:
+- [[#readme-in-org-format][Readme, in org format]]
+- [[#main-file][Main file]]
+  - [[#header-and-changelog][Header and Changelog]]
+  - [[#parameters][Parameters]]
+  - [[#functions][Functions]]
+    - [[#help-function][Help function]]
+    - [[#update-source-tree-with-git][Update source tree with git]]
+    - [[#patching][Patching]]
+    - [[#cleaning-scripts-distcleanmaintainer-clean][Cleaning scripts distclean/maintainer-clean]]
+    - [[#configure-emacs-for-compilation][Configure Emacs for compilation]]
+    - [[#make-command][Make command]]
+    - [[#installuninstall][Install/uninstall]]
+    - [[#running][Running]]
+    - [[#do-everything-section][Do-everything section]]
+  - [[#main][Main]]
+- [[#makefile][Makefile]]
+- [[#conclusions][Conclusions]]
+- [[#bits-to-add][Bits to add]]
+:END:
 
 #+BEGIN_SRC org -i
 ,* Introduction
