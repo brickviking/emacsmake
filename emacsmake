@@ -101,26 +101,28 @@ EMACSCONFIGPARAMSNOX=( # You know I just had to do it
 
 helpMe() {
     echo "$0: Emacs recompiler script"
-    echo "   -h   help (this text)"
-    echo "   -d   Runs 'make distclean'"
-    echo "   -D   Runs 'make maintainer-clean'"
-    echo "   -g   Runs a 'git pull' from the top of the tree"
-    echo "   -p   patch sourcetree from patch files in patches/ directory"
+    echo "  -h    help (this text)"
+    echo "  -d    Runs 'make distclean'"
+    echo "  -D    Runs 'make maintainer-clean'"
+    echo "  -g    Runs a 'git pull' from the top of the tree"
+    echo "  -p    patch sourcetree from patch files in patches/ directory"
     echo "        This takes NO account of already-patched files"
-    echo "   -a   Runs configure, make and install - will make gtk3 client"
-    echo "   -e   run every step; distclean, configure, make, install, run"
+    echo "  -a    Runs configure, make and install - will make gtk3 client"
+    echo "  -e    run every step; distclean, configure, make, install, run"
     echo "        default Emacs binary location is ${EMACSHOME}"
-    echo "   -c   run ./configure with params ${EMACSCONFIGPARAMS[@]}"
-    echo "   -cg  run ./configure with params ${EMACSCONFIGPARAMSGTK[@]}"
-    echo "   -cg2 run ./configure with params ${EMACSCONFIGPARAMSGTK2[@]}"
-    echo "   -cl  run ./configure with params ${EMACSCONFIGPARAMSLUCID[@]}"
-    echo "   -cm  run ./configure with params ${EMACSCONFIGPARAMSMOTIF[@]}"
-    echo "   -cn  run ./configure with params ${EMACSCONFIGPARAMSNOX[@]}"
-    echo "   -m   compile (no install), runs make"
-    echo "   -i   install to ${EMACSHOME}, runs make install"
-    echo "   -mi  combines compile and install steps"
-    echo "   -r   execute from ${EMACSHOME}, runs  with-emacs.sh -d "${EMACSCONFHOME}" -i quelpa-use-package "
-    echo "   -u   uninstall from ${EMACSHOME}, runs make uninstall"
+    echo "  -c    run ./configure with params ${EMACSCONFIGPARAMS[@]}"
+    echo "  -cg   run ./configure with params ${EMACSCONFIGPARAMSGTK[@]}"
+    echo "  -cg2  run ./configure with params ${EMACSCONFIGPARAMSGTK2[@]}"
+    echo "  -cl   run ./configure with params ${EMACSCONFIGPARAMSLUCID[@]}"
+    echo "  -cm   run ./configure with params ${EMACSCONFIGPARAMSMOTIF[@]}"
+    echo "  -cn   run ./configure with params ${EMACSCONFIGPARAMSNOX[@]}"
+    echo "  -mb   compile (no install), runs make with bootstrap"
+    echo "  -m    compile (no install), runs make"
+    echo "  -i    install to ${EMACSHOME}, runs make install"
+    echo "  -mi   combines compile and install steps"
+    echo "  -mat  configure, make, install all toolkits"
+    echo "  -r    execute from ${EMACSHOME}, runs  with-emacs.sh -d "${EMACSCONFHOME}" -i quelpa-use-package "
+    echo "  -u   uninstall from ${EMACSHOME}, runs make uninstall"
 }
 
 # This can generally update the git tree in the manner prescribed by the user.
@@ -244,12 +246,45 @@ EMACSCONFIGPARAMS=(
 }
 
 # Runs make (hopefully we ran configure first)
-makeMe() {
+makeMeBootstrap() {
     if [[ -f Makefile ]]; then
 	make bootstrap -j4 # because we want stale .elc files regenned
     else
-	echo "No Makefile found, perhaps run with -c first?"
+	echo "No Makefile found, perhaps run with -c/-cn/-cl/-cm/-cg2/-cg3 first?"
     fi
+}
+
+makeMe {
+    if [[ -f Makefile ]]; then
+	make -j4 # because we don't want .elc files regenned
+    else
+	echo "No Makefile found, perhaps run with -c/-cn/-cl/-cm/-cg2/-cg3 first?"
+    fi
+}
+
+# Yes, we want to make and install all the toolkits
+makeAllToolkits() {
+    # First let's check that we got rid of the Makefile
+    # First, the -nox (the next ones don't really matter what order)
+    configMeNoX
+    makeMeBootstrap  # because we want to pick up the "make bootstrap"
+    installMe
+    # Then motif
+    configMeMotif
+    makeMe
+    installMe
+    # lucid
+    configMeLucid
+    makeMe
+    installMe
+    # gtk2
+    configMeGtk2
+    makeMe
+    installMe
+    # and last, the default of gtk3
+    configMe
+    makeMe
+    installMe
 }
 
 # Find what I made already, this is normally called from installMe
@@ -334,7 +369,7 @@ runMe() {
 execMakeMe() {
     cleanMe # it's a distclean
     configMe
-    makeMe
+    makeMeBootstrap # bootstrap just for good measure
 }
 
 # Do everything except runMe - may require sudo
@@ -399,8 +434,11 @@ elif [[ -n $1 ]]; then
         "-cn") pushd "${EMACSCOMPILEHOME}" >/dev/null
               configMeNoX
               popd >/dev/null ;;
+        "-mb")pushd "${EMACSCOMPILEHOME}" >/dev/null
+              makeMeBootstrap
+              popd >/dev/null ;;
         "-m") pushd "${EMACSCOMPILEHOME}" >/dev/null
-              makeMe
+              makeMe # without bootstrap
               popd >/dev/null ;;
         "-i") pushd "${EMACSCOMPILEHOME}" >/dev/null
               installMe
@@ -409,6 +447,10 @@ elif [[ -n $1 ]]; then
         "-mi") pushd "${EMACSCOMPILEHOME}">/dev/null
               makeMe
               installMe
+              popd >/dev/null ;;
+        # Gotta catch them all! Check the function comment.
+        "-mat")  pushd "${EMACSCOMPILEHOME}">/dev/null
+              makeAllToolkits
               popd >/dev/null ;;
         "-r") pushd "${EMACSHOME}">/dev/null
               runMe
