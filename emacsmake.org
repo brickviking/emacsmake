@@ -127,6 +127,7 @@ earlier versions (13-18.58) predated the autoconf software suite which wasn't re
 # v0.11 Created new param to combine make and install, deliberately doesn't include config.
 # v0.12 Begin process of pulling in vars from environment if already provided.
 # v0.13 Now we've got the main x-toolkit targets, how about --without-x?
+# v0.14 We're adding makeAllToolkits, and makeMeBootstrap
 #
 # TODO: rework for versions of Emacs earlier than 28.0.50, as there's no makefile until the
 #       configure phase. Still doesn't work for much earlier than 23 - 18.59 has no configure.
@@ -271,6 +272,7 @@ helpMe() {
     echo "  -i    install to ${EMACSHOME}, runs make install"
     echo "  -mi   combines compile and install steps"
     echo "  -mat  configure, make, install all toolkits"
+    echo "        You should NOT be running emacs when you use this"
     echo "  -r    execute from ${EMACSHOME}, runs  with-emacs.sh -d "${EMACSCONFHOME}" -i quelpa-use-package "
     echo "  -u   uninstall from ${EMACSHOME}, runs make uninstall"
 }
@@ -479,7 +481,6 @@ This should do the following:
 #+BEGIN_SRC bash -i
 # Yes, we want to make and install all the toolkits
 makeAllToolkits() {
-    # First let's check that we got rid of the Makefile
     # First, the -nox (the next ones don't really matter what order)
     configMeNoX
     makeMeBootstrap  # because we want to pick up the "make bootstrap"
@@ -503,6 +504,25 @@ makeAllToolkits() {
 }
 #+END_SRC
 
+This function's meant to find our currently-running emacs and check if it's in a place that will
+be replaced by installing. If so, we should warn the user.
+#+BEGIN_SRC bash -i
+# We need a "check we're not running emacs" function
+checkRunningEmacs() {
+    # First let's check that emacs is NOT running. This way we can replace it.
+    rtval=$(pidof emacs)
+    # this line will NOT work if we have multiple PIDs, we then need to check multiple locations
+    RUNNINGEXE="$(basename $(readlink /proc/${rtval}/exe) )"
+    # Grab the location we're about to overwrite
+    EMACSTGT="$(basename $(readlink ${EMACSHOME}/bin/emacs) )"
+
+    # If this location would get overwritten (as with /usr/local/emacs)
+    if [[ ${EMACSTGT} == ${RUNNINGEXE} ]]; then
+        # bleat
+        echo "This switch will want to replace the emacs you're currently running"
+    fi
+}
+#+END_SRC
 *** Install/uninstall
 
 This is a way to find out what I already compiled, if I compiled it. We start off with a default
