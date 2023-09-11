@@ -295,10 +295,10 @@ checkRunningEmacs() {
     # this line will NOT work if we have multiple PIDs, we then need to check multiple locations
     RUNNINGEXE="$(basename $(readlink /proc/${rtval}/exe) )"
     # Grab the location we're about to overwrite
-    EMACSTGT="$(basename $(readlink ${EMACSHOME}/bin/emacs) )"
+    EMACSTARGET="$(basename $(readlink ${EMACSHOME}/bin/emacs) )"
 
     # If this location would get overwritten (as with /usr/local/emacs)
-    if [[ ${EMACSTGT} == ${RUNNINGEXE} ]]; then
+    if [[ ${EMACSTARGET} == ${RUNNINGEXE} ]]; then
         # bleat
         echo "This switch will want to replace the emacs you're currently running"
     fi
