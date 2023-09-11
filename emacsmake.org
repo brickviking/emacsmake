@@ -505,7 +505,13 @@ makeAllToolkits() {
 #+END_SRC
 
 This function's meant to find our currently-running emacs and check if it's in a place that will
-be replaced by installing. If so, we should warn the user.
+be replaced by installing. If so, we should warn the user, especially if we're compiling
+from within emacs itself (i.e. a vterm).
+
+A point was raised that this might not work if PREFIX/POSTFIX were used to transform the
+binary during installation. I'll have to perhaps look at that later, as I need to find out
+whether that affects things for this script in particular.
+
 #+BEGIN_SRC bash -i
 # We need a "check we're not running emacs" function
 checkRunningEmacs() {
