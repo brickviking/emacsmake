@@ -529,6 +529,8 @@ it'll never start.
 These options all affect the installation of the newly-compiled emacs, hence attempting to replace
 the running binary. It shouldn't theoretically affect the compile itself.
 
+Technically, wouldn't this affect the -install target too?
+
 #+BEGIN_SRC bash -i
 # We need a "check we're not running emacs" function
 checkRunningEmacs() {
