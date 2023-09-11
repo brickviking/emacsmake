@@ -512,6 +512,23 @@ A point was raised that this might not work if PREFIX/POSTFIX were used to trans
 binary during installation. I'll have to perhaps look at that later, as I need to find out
 whether that affects things for this script in particular.
 
+The question about what to do hasn't been addressed yet; do we:
++ warn the user and continue on :: This won't be useful if the user has kicked it off and switched
+ away. We can't do much about this, it's on them. It'll simply complain it can't replace the running
+ binary.
++ warn the user, and wait for a short interval :: Again, if user switches away on the premise that
+ this switch is for unattended use (a reasonable expectation) they won't be happy. Again, it's on
+ them. Then of course we perhaps need to provide a way to exit out.
++ warn user and block :: This is the most intrusive. In the event that the user wants to switch
+away, they'll find that the warning has blocked them from continuing the compile until they either
+hit "Yes", "Space" or some other key showing assent.
++ warn user and exit with error code :: This means they won't get a compiled emacs of any sort if
+ they're running it, so they can't simply sit around in #emacs while they wait for the compile;
+it'll never start.
+
+These options all affect the installation of the newly-compiled emacs, hence attempting to replace
+the running binary. It shouldn't theoretically affect the compile itself.
+
 #+BEGIN_SRC bash -i
 # We need a "check we're not running emacs" function
 checkRunningEmacs() {
