@@ -179,7 +179,7 @@ configMe() {
 }
 
 # Should support the GTK1 crowd but here, just grabs gtk3
-configMeGTK() {
+configMeGtk() {
 EMACSCONFIGPARAMS=(
     "--with-modules"
     "--with-tree-sitter"
@@ -192,7 +192,7 @@ EMACSCONFIGPARAMS=(
 }
 
 # Should support the GTK2 crowd too
-configMeGTK2() {
+configMeGtk2() {
 EMACSCONFIGPARAMS=(
     "--with-modules"
     "--with-tree-sitter"
@@ -437,10 +437,10 @@ elif [[ -n $1 ]]; then
               configMe
               popd >/dev/null ;; # Uses GTK3 with xwidgets
         "-cg") pushd "${EMACSCOMPILEHOME}" >/dev/null
-              configMeGTK
+              configMeGtk
               popd >/dev/null ;;
         "-cg2") pushd "${EMACSCOMPILEHOME}" >/dev/null
-              configMeGTK2
+              configMeGtk2
               popd >/dev/null ;;
         "-cl") pushd "${EMACSCOMPILEHOME}" >/dev/null
               configMeLucid
