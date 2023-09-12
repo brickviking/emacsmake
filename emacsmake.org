@@ -459,7 +459,7 @@ makeMeBootstrap() {
     fi
 }
 
-makeMe {
+makeMe() {
     if [[ -f Makefile ]]; then
 	make -j4 # because we don't want .elc files regenned
     else
