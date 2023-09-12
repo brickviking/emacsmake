@@ -711,8 +711,9 @@ However, I could have used short/long switches like the following:
 
 The -e:/--emacs: switch was the precursor for the "run Emacs from this location instead" function
 from with-emacs.sh, but as the script does stuff better than I would have done, I left that up to
-the secondary script. It's not written by me, and the style is quite different - presumably someone
-who knows what they're doing. The -e switch has been reutilised for "--everything".
+the secondary script. It's not written by me, and the style is quite different - presumably 
+someone who knows what they're doing. The -e switch has been reutilised for "--everything", but
+might end up being removed along with the -a switch while I consider what best to use.
 
 #+BEGIN_SRC bash -i
 ########
