@@ -462,7 +462,7 @@ elif [[ -n $1 ]]; then
               popd >/dev/null ;;
         # Let's do this all here
         "-mi") pushd "${EMACSCOMPILEHOME}">/dev/null
-              makeMe
+              makeMeBootstrap
               installMe
               popd >/dev/null ;;
         # Gotta catch them all! Check the function comment.
