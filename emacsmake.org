@@ -832,6 +832,8 @@ I deliberately haven't used "install" as I don't know what it does. I've also em
 the makefile, which probably isn't a great idea either, but hey, it's my own machine. This is also
 not for use on a Windows or MS-DOS/FreeDOS install.
 
+I also haven't created a TAGS/tags file from here, as the local tools here are a bit non-standard.
+
 #+BEGIN_SRC makefile -i
 # Dirt-simple Makefile to install the emacsmake script
 # v0.1 Initial cut - it only has to install one thing.
