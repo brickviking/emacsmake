@@ -62,7 +62,7 @@ that you can build, so check out what's available for compiling, select one, and
 will of course need to know how to use git, and how to select the correct branch of emacs to
 compile.
 
-'** Compile requirements
+,** Compile requirements
 Because you're compiling Emacs, you can choose which libraries to compile Emacs with; adjust the
 =EMACSCONFIGPARAMS= array for this. You might want to check the output of =./configure --help= from
 within the source directory to see what parameters are supported.
