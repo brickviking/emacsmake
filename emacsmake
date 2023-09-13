@@ -17,6 +17,7 @@
 # v0.12 Begin process of pulling in vars from environment if already provided.
 # v0.13 Now we've got the main x-toolkit targets, how about --without-x?
 # v0.14 We're adding makeAllToolkits, and makeMeBootstrap
+# v0.15 Corrected bug in -mat where gtk3 asked for but gtk2 compiled.
 #
 # TODO: rework for versions of Emacs earlier than 28.0.50, as there's no makefile until the
 #       configure phase. Still doesn't work for much earlier than 23 - 18.59 has no configure.
@@ -207,6 +208,15 @@ EMACSCONFIGPARAMS=(
 
 # Default unless something else chosen, simply call configMe
 configMeGtk3() {
+EMACSCONFIGPARAMS=(
+    "--with-modules"
+    "--with-tree-sitter"
+    "--with-imagemagick"
+    "--with-cairo"
+    "--with-xwidgets"
+    "--with-x-toolkit=gtk3" # for completeness's sake
+    "--prefix=${EMACSHOME}" )
+    WMGR=gtk3
     configMe
 }
 
@@ -270,7 +280,7 @@ makeAllToolkits() {
     configMeNoX
     makeMeBootstrap  # because we want to pick up the "make bootstrap"
     installMe
-    # Then motif
+    # Then motif, no need to rebuild .elc, but *.eln could be a problem
     configMeMotif
     makeMe
     installMe
@@ -283,7 +293,7 @@ makeAllToolkits() {
     makeMe
     installMe
     # and last, the default of gtk3
-    configMe
+    configMeGtk3
     makeMe
     installMe
 }
