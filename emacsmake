@@ -447,6 +447,9 @@ elif [[ -n $1 ]]; then
         "-p") pushd "${EMACSCOMPILEHOME}" >/dev/null
               patchMe
               popd >/dev/null ;;
+        "-pu") pushd "${EMACSCOMPILEHOME}" >/dev/null
+              unPatchMe
+              popd >/dev/null ;;
         "-a") pushd "${EMACSCOMPILEHOME}" >/dev/null
               execMakeMe
               popd >/dev/null ;;
