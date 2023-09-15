@@ -127,8 +127,9 @@ earlier versions (13-18.58) predated the autoconf software suite which wasn't re
 # v0.11 Created new param to combine make and install, deliberately doesn't include config.
 # v0.12 Begin process of pulling in vars from environment if already provided.
 # v0.13 Now we've got the main x-toolkit targets, how about --without-x?
-# v0.14 We're adding makeAllToolkits, and makeMeBootstrap
+# v0.14 We're adding makeAllToolkits, and makeMeBootstrap.
 # v0.15 Corrected bug in -mat where gtk3 asked for but gtk2 compiled.
+# v0.16 Added an unPatch switch (-pu) to reverse patches already applied with -p.
 #
 # TODO: rework for versions of Emacs earlier than 28.0.50, as there's no makefile until the
 #       configure phase. Still doesn't work for much earlier than 23 - 18.59 has no configure.
