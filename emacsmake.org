@@ -156,8 +156,13 @@ The concept would be:
   + if so, select other defaults
   + write file back (for next time)
 
-(*) We need to tweak EMACSCOMPILEHOME, EMACSHOME and EMACSCONFIGPARAMS. The other two (EMACSCONFHOME and
-EMACSRUNARGS) aren't needed for compiling, merely for running.
+(*) We need to tweak EMACSCOMPILEHOME, EMACSHOME and EMACSCONFIGPARAMS. The other two (EMACSCONFHOME
+and EMACSRUNARGS) aren't needed for compiling, merely for running.
+
+We could do it nice and simply, and just write the config code as bash, so that simply sourcing it
+would do the job nicely. However, I'm not sure how that works for overriding defaults in the current
+script regarding arrays. I've no reason to believe it won't work, but I don't know as much as I'd
+like to.
 
 Currently variables just get set to whatever made sense in the script, but there's no reason why we
 can't support env vars from the outside either.
@@ -169,6 +174,9 @@ can't support env vars from the outside either.
 # This WILL break if the user running (EUID) isn't the same as the user owning the source directory
 # i.e. if there's no /root/src/c/emacs
 #EMACSCOMPILEHOME="${HOME}/src/c/emacs" # Should be specific, not user-relative
+
+# Home for config file, if there's one. Let's make it somewhat XDG-compliant.
+EMACSMAKECONF="${XDG_CONFIG_HOME}/emacsmake_conf.sh"
 
 # Provide for the option to feed these vars in from the outside
 # and allows us to pull in from somewhere else
