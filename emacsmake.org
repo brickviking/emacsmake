@@ -167,6 +167,8 @@ like to.
 Currently variables just get set to whatever made sense in the script, but there's no reason why we
 can't support env vars from the outside either.
 
+I deliberately haven't selected aot, as the extra files takes up some space on drive.
+
 #+BEGIN_SRC bash -i
 #######################
 # Modifiable parameters
