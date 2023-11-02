@@ -11,7 +11,7 @@
 # v0.8 Added some commented out options (lucid and motif).
 # v0.8.1 Twiddled with config, error's only in the docs.
 # v0.8.2 fixed docs for config with ugly hack.
-# v0.9 Planning install upgrade to symlink the emacs binary to emacs-${VER}-$[WMGR}
+# v0.9 Planning install upgrade to symlink the Emacs binary to emacs-${VER}-$[WMGR}
 # v0.10 Reworked all the pushd/popd to be quiet, by redirecting their output to /dev/null.
 # v0.11 Created new param to combine make and install, deliberately doesn't include config.
 # v0.12 Begin process of pulling in vars from environment if already provided.
@@ -20,6 +20,7 @@
 # v0.15 Corrected bug in -mat where gtk3 asked for but gtk2 compiled.
 # v0.16 Added an unPatch switch (-pu) to reverse patches already applied with -p.
 # v0.17 Some more tweaks, adding --without-native-compilation re: emacs-devel posts.
+# v0.18 Corrected emacs to Emacs where it makes sense to.
 #
 # TODO: rework for versions of Emacs earlier than 28.0.50, as there's no makefile until the
 #       configure phase. Still doesn't work for much earlier than 23 - 18.59 has no configure.
@@ -132,10 +133,10 @@ helpMe() {
     echo "  -i    install to ${EMACSHOME}, runs make install"
     echo "  -mi   combines compile and install steps"
     echo "  -mat  configure, make, install all toolkits"
-    echo "        You should NOT be running emacs when you use this"
+    echo "        You should NOT be running Emacs when you use this"
     echo "  -r    execute from ${EMACSHOME}, runs  with-emacs.sh -d "${EMACSCONFHOME}" -i quelpa-use-package "
     echo "  -u   uninstall from ${EMACSHOME}, runs make uninstall"
-    echo "       This will uninstall the most recently installed emacs if you"
+    echo "       This will uninstall the most recently installed Emacs if you"
     echo "       built from this exact commit, otherwise behaviour is undefined"
 }
 
@@ -325,9 +326,9 @@ makeAllToolkits() {
     installMe
 }
 
-# We need a "check we're not running emacs" function
+# We need a "check we're not running Emacs" function
 checkRunningEmacs() {
-    # First let's check that emacs is NOT running. This way we can replace it.
+    # First let's check that Emacs is NOT running. This way we can replace it.
     rtval=$(pidof emacs)
     # this line will NOT work if we have multiple PIDs, we then need to check multiple locations
     RUNNINGEXE="$(basename $(readlink /proc/${rtval}/exe) )"
@@ -337,7 +338,7 @@ checkRunningEmacs() {
     # If this location would get overwritten (as with /usr/local/emacs)
     if [[ ${EMACSTARGET} == ${RUNNINGEXE} ]]; then
         # bleat
-        echo "This switch will want to replace the emacs you're currently running"
+        echo "This switch will want to replace the Emacs you're currently running"
     fi
 }
 
@@ -370,14 +371,14 @@ whatMadeMe() {
 # which will be something like emacs-29.1.50-{gtk2,gtk3,lucid,motif}
 # May not work for versions earlier than 28
 copyMe() {
-    # If we fail to find an emacs here, we failed to install
+    # If we fail to find an Emacs here, we failed to install
     if [[ -f ${EMACSHOME}/bin/emacs ]]; then
         EMACSTGT="$(readlink ${EMACSHOME}/bin/emacs)"
         echo "Linking ${EMACSHOME}/bin/${EMACSTGT} to ${EMACSHOME}/bin/${EMACSTGT}-${WMGR}"
         # There should perhaps be a sudo/doas here
         sudo cp -iv ${EMACSHOME}/bin/${EMACSTGT} ${EMACSHOME}/bin/${EMACSTGT}-${WMGR}
     else
-        echo "$0: we couldn't find an emacs at ${EMACSHOME} or ${WMGR} isn't set."
+        echo "$0: we couldn't find an Emacs at ${EMACSHOME} or ${WMGR} isn't set."
     fi
 }
 

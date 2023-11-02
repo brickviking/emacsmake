@@ -47,7 +47,7 @@ compiled, installed and executed.
 First off, you'll need to install the source code to Emacs, adjust =EMACSCOMPILEHOME=. You can either
 fetch and extract a static tarball of the source, or you can access either of the git repositories.
 
-Tarballs are usually a fixed point in the stage of emacs development, but git repositories have
+Tarballs are usually a fixed point in the stage of Emacs development, but git repositories have
 multiple threads of development, meaning there's a requirement to select the correct one if you
 don't simply want to use the latest available code, often labeled the master branch. This is always
 a moving target, so people often select a version branch, or perhaps a specific point in one of
@@ -57,9 +57,9 @@ Tarballs are created at these points, making them useful for snapshots where not
 change in the future. It also means there's no expected future additions to that development unless
 you make the effort to update on a regular basis.
 
-If you grab code from the git repositories, be aware that there are multiple branches of emacs code
+If you grab code from the git repositories, be aware that there are multiple branches of Emacs code
 that you can build, so check out what's available for compiling, select one, and you'll be off. You
-will of course need to know how to use git, and how to select the correct branch of emacs to
+will of course need to know how to use git, and how to select the correct branch of Emacs to
 compile.
 
 ,** Compile requirements
@@ -122,7 +122,7 @@ earlier versions (13-18.58) predated the autoconf software suite which wasn't re
 # v0.8 Added some commented out options (lucid and motif).
 # v0.8.1 Twiddled with config, error's only in the docs.
 # v0.8.2 fixed docs for config with ugly hack.
-# v0.9 Planning install upgrade to symlink the emacs binary to emacs-${VER}-$[WMGR}
+# v0.9 Planning install upgrade to symlink the Emacs binary to emacs-${VER}-$[WMGR}
 # v0.10 Reworked all the pushd/popd to be quiet, by redirecting their output to /dev/null.
 # v0.11 Created new param to combine make and install, deliberately doesn't include config.
 # v0.12 Begin process of pulling in vars from environment if already provided.
@@ -131,6 +131,7 @@ earlier versions (13-18.58) predated the autoconf software suite which wasn't re
 # v0.15 Corrected bug in -mat where gtk3 asked for but gtk2 compiled.
 # v0.16 Added an unPatch switch (-pu) to reverse patches already applied with -p.
 # v0.17 Some more tweaks, adding --without-native-compilation re: emacs-devel posts.
+# v0.18 Corrected emacs to Emacs where it makes sense to.
 #
 # TODO: rework for versions of Emacs earlier than 28.0.50, as there's no makefile until the
 #       configure phase. Still doesn't work for much earlier than 23 - 18.59 has no configure.
@@ -292,10 +293,10 @@ helpMe() {
     echo "  -i    install to ${EMACSHOME}, runs make install"
     echo "  -mi   combines compile and install steps"
     echo "  -mat  configure, make, install all toolkits"
-    echo "        You should NOT be running emacs when you use this"
+    echo "        You should NOT be running Emacs when you use this"
     echo "  -r    execute from ${EMACSHOME}, runs  with-emacs.sh -d "${EMACSCONFHOME}" -i quelpa-use-package "
     echo "  -u   uninstall from ${EMACSHOME}, runs make uninstall"
-    echo "       This will uninstall the most recently installed emacs if you"
+    echo "       This will uninstall the most recently installed Emacs if you"
     echo "       built from this exact commit, otherwise behaviour is undefined"
 }
 #+END_SRC
@@ -554,9 +555,9 @@ makeAllToolkits() {
 }
 #+END_SRC
 
-This function's meant to find our currently-running emacs and check if it's in a place that will
+This function's meant to find our currently-running Emacs and check if it's in a place that will
 be replaced by installing. If so, we should warn the user, especially if we're compiling
-from within emacs itself (i.e. a vterm).
+from within Emacs itself (i.e. a vterm).
 
 A point was raised that this might not work if PREFIX/POSTFIX were used to transform the
 binary during installation. I'll have to perhaps look at that later, as I need to find out
@@ -572,19 +573,19 @@ The question about what to do hasn't been addressed yet; do we:
 + warn user and block :: This is the most intrusive. In the event that the user wants to switch
 away, they'll find that the warning has blocked them from continuing the compile until they either
 hit "Yes", "Space" or some other key showing assent.
-+ warn user and exit with error code :: This means they won't get a compiled emacs of any sort if
++ warn user and exit with error code :: This means they won't get a compiled Emacs of any sort if
  they're running it, so they can't simply sit around in #emacs while they wait for the compile;
 it'll never start.
 
-These options all affect the installation of the newly-compiled emacs, hence attempting to replace
+These options all affect the installation of the newly-compiled Emacs, hence attempting to replace
 the running binary. It shouldn't theoretically affect the compile itself.
 
 Technically, wouldn't this affect the -install target too?
 
 #+BEGIN_SRC bash -i
-# We need a "check we're not running emacs" function
+# We need a "check we're not running Emacs" function
 checkRunningEmacs() {
-    # First let's check that emacs is NOT running. This way we can replace it.
+    # First let's check that Emacs is NOT running. This way we can replace it.
     rtval=$(pidof emacs)
     # this line will NOT work if we have multiple PIDs, we then need to check multiple locations
     RUNNINGEXE="$(basename $(readlink /proc/${rtval}/exe) )"
@@ -594,7 +595,7 @@ checkRunningEmacs() {
     # If this location would get overwritten (as with /usr/local/emacs)
     if [[ ${EMACSTARGET} == ${RUNNINGEXE} ]]; then
         # bleat
-        echo "This switch will want to replace the emacs you're currently running"
+        echo "This switch will want to replace the Emacs you're currently running"
     fi
 }
 #+END_SRC
@@ -605,7 +606,7 @@ of gtk3 in WMGR, which only changes if we find something specific. We don't real
 off the pattern itself and it would save us a step through cut.
 
 If we compiled without a toolkit altogether, this will have to be added to, as there'd be no other
-switches to look for. There must be some way of getting a non-X emacs compiled too.
+switches to look for. There must be some way of getting a non-X Emacs compiled too.
 
 #+BEGIN_SRC bash -i
 # Find what I made already, this is normally called from installMe
@@ -634,7 +635,7 @@ whatMadeMe() {
 }
 #+END_SRC
 
-This piece copies the generated emacs binary at the destination to a backup that has the X toolkit
+This piece copies the generated Emacs binary at the destination to a backup that has the X toolkit
 name appended.
 
 #+BEGIN_SRC bash -i
@@ -642,14 +643,14 @@ name appended.
 # which will be something like emacs-29.1.50-{gtk2,gtk3,lucid,motif}
 # May not work for versions earlier than 28
 copyMe() {
-    # If we fail to find an emacs here, we failed to install
+    # If we fail to find an Emacs here, we failed to install
     if [[ -f ${EMACSHOME}/bin/emacs ]]; then
         EMACSTGT="$(readlink ${EMACSHOME}/bin/emacs)"
         echo "Linking ${EMACSHOME}/bin/${EMACSTGT} to ${EMACSHOME}/bin/${EMACSTGT}-${WMGR}"
         # There should perhaps be a sudo/doas here
         sudo cp -iv ${EMACSHOME}/bin/${EMACSTGT} ${EMACSHOME}/bin/${EMACSTGT}-${WMGR}
     else
-        echo "$0: we couldn't find an emacs at ${EMACSHOME} or ${WMGR} isn't set."
+        echo "$0: we couldn't find an Emacs at ${EMACSHOME} or ${WMGR} isn't set."
     fi
 }
 

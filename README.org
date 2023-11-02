@@ -7,7 +7,7 @@ compiled, installed and executed.
 First off, you'll need to install the source code to Emacs, adjust =EMACSCOMPILEHOME=. You can either
 fetch and extract a static tarball of the source, or you can access either of the git repositories.
 
-Tarballs are usually a fixed point in the stage of emacs development, but git repositories have
+Tarballs are usually a fixed point in the stage of Emacs development, but git repositories have
 multiple threads of development, meaning there's a requirement to select the correct one if you
 don't simply want to use the latest available code, often labeled the master branch. This is always
 a moving target, so people often select a version branch, or perhaps a specific point in one of
@@ -17,9 +17,9 @@ Tarballs are created at these points, making them useful for snapshots where not
 change in the future. It also means there's no expected future additions to that development unless
 you make the effort to update on a regular basis.
 
-If you grab code from the git repositories, be aware that there are multiple branches of emacs code
+If you grab code from the git repositories, be aware that there are multiple branches of Emacs code
 that you can build, so check out what's available for compiling, select one, and you'll be off. You
-will of course need to know how to use git, and how to select the correct branch of emacs to
+will of course need to know how to use git, and how to select the correct branch of Emacs to
 compile.
 
 ** Compile requirements
