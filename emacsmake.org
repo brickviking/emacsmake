@@ -130,12 +130,16 @@ earlier versions (13-18.58) predated the autoconf software suite which wasn't re
 # v0.14 We're adding makeAllToolkits, and makeMeBootstrap.
 # v0.15 Corrected bug in -mat where gtk3 asked for but gtk2 compiled.
 # v0.16 Added an unPatch switch (-pu) to reverse patches already applied with -p.
+# v0.17 Some more tweaks, adding --without-native-compilation re: emacs-devel posts.
 #
 # TODO: rework for versions of Emacs earlier than 28.0.50, as there's no makefile until the
 #       configure phase. Still doesn't work for much earlier than 23 - 18.59 has no configure.
 #+END_SRC
 
 ** Parameters
+  :PROPERTIES:
+  :CUSTOM_ID: parameters
+  :END:
 
 So far, the only thing of note here is that we need a specific directory to be explicitly mentioned
 so that calling this from sudo doesn't bork with messages such as:
@@ -195,6 +199,7 @@ EMACSCONFIGPARAMS=(
     "--with-cairo"
     "--with-xwidgets"
     "--with-x-toolkit=gtk3" # for completeness's sake
+    "--without-native-compilation"
     "--prefix=${EMACSHOME}" )
 # Default X toolkit if we don't change it with a -c{g2,l,m,n} option
 WMGR=gtk3
@@ -210,7 +215,7 @@ EMACSRUNARGS=(
 
 The boilerplate help just in case I forgot what switches I coded. Uses UNIX syntax (-x) not Microsoft (/x). There's also a slight bug with EMACSCONFIGPARAMS
 if I decide I want to show non-default window toolkits. So far I've added
-gtk, gtk2, gtk3 (the default), lucid and Motif toolkits. I haven't bothered
+GTK, GTK2, GTK3 (the default), Lucid and Motif toolkits. I haven't bothered
 with -nw, as I'm always on a desktop with an Xorg server running.
 
 #+BEGIN_SRC bash -i
@@ -270,6 +275,9 @@ helpMe() {
     echo "  -g    Runs a 'git pull' from the top of the tree"
     echo "  -p    patch sourcetree from patch files in patches/ directory"
     echo "        This takes NO account of already-patched files"
+    echo "  -pu   Undoes patches previously applied with -p in reverse order"
+    echo "        Again, this takes NO account of already unpatched files"
+    echo "        Errors from these two switches will be from patch, not $0"
     echo "  -a    Runs configure, make and install - will make gtk3 client"
     echo "  -e    run every step; distclean, configure, make, install, run"
     echo "        default Emacs binary location is ${EMACSHOME}"
@@ -287,6 +295,8 @@ helpMe() {
     echo "        You should NOT be running emacs when you use this"
     echo "  -r    execute from ${EMACSHOME}, runs  with-emacs.sh -d "${EMACSCONFHOME}" -i quelpa-use-package "
     echo "  -u   uninstall from ${EMACSHOME}, runs make uninstall"
+    echo "       This will uninstall the most recently installed emacs if you"
+    echo "       built from this exact commit, otherwise behaviour is undefined"
 }
 #+END_SRC
 
@@ -372,6 +382,9 @@ cleanMeGood() {
 #+END_SRC
 
 *** Configure Emacs for compilation
+  :PROPERTIES:
+  :CUSTOM_ID: configure-emacs-for-compilation
+  :END:
 
 It's pretty obvious what this does, though it does presume we're in the correct directory, which we
 should be by the time we get here. Heck, if we weren't, something went badly wrong.
@@ -403,6 +416,7 @@ EMACSCONFIGPARAMS=(
     "--with-imagemagick"
     "--with-cairo"
     "--with-x-toolkit=gtk"
+    "--without-native-compilation"
     "--prefix=${EMACSHOME}" )
     WMGR=gtk # (might be gtk3)
     configMe
@@ -416,6 +430,7 @@ EMACSCONFIGPARAMS=(
     "--with-imagemagick"
     "--with-cairo"
     "--with-x-toolkit=gtk2"
+    "--without-native-compilation"
     "--prefix=${EMACSHOME}" )
     WMGR=gtk2
     configMe
@@ -431,6 +446,7 @@ EMACSCONFIGPARAMS=(
     "--with-cairo"
     "--with-xwidgets"
     "--with-x-toolkit=gtk3" # for completeness's sake
+    "--without-native-compilation"
     "--prefix=${EMACSHOME}" )
     WMGR=gtk3
     configMe
@@ -444,6 +460,7 @@ EMACSCONFIGPARAMS=(
     "--with-imagemagick"
     "--with-cairo"
     "--with-x-toolkit=lucid"
+    "--without-native-compilation"
     "--prefix=${EMACSHOME}" )
     WMGR=lucid
     configMe
@@ -457,6 +474,7 @@ EMACSCONFIGPARAMS=(
     "--with-imagemagick"
     "--with-cairo"
     "--with-x-toolkit=motif"
+    "--without-native-compilation"
     "--prefix=${EMACSHOME}" )
     WMGR=motif
     configMe
@@ -468,6 +486,7 @@ EMACSCONFIGPARAMS=(
     "--with-modules"
     "--with-tree-sitter"
     "--without-x"
+    "--without-native-compilation"
     "--prefix=${EMACSHOME}" )
     WMGR=nox
     configMe
@@ -883,4 +902,4 @@ There's also no config file, and one could be used to help clean the script up. 
 would still be needed.
 
 * Bits to add
-
+Nothing to add yet.
