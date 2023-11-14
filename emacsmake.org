@@ -742,10 +742,10 @@ It's assumed we know how to get this from Github if we don't have it, perhaps an
 assumption. It's available from Github at the following link (assuming he didn't remove it):
 https://github.com/alphapapa/with-emacs.sh
 
-We explicitly disallow multiple stages from being run, as we need to process things in a certain
-order and it's too complex for me to track what stages I've set, especially if I try doing install
-folllowed by uninstall, we'd have to reorder this so the uninstall was done first even if we
-specified it last.
+We explicitly disallow multiple stages from being run (except the ones I've specifically allowed),
+as we need to process things in a certain order and it's too complex for me to track what stages
+I've set, especially if I try doing install folllowed by uninstall, we'd have to reorder this so the
+uninstall was done first even if we specified it last.
 
 I've also not made any attempt at using getopts, as I feel it's simply quicker to roll my own.
 However, I could have used short/long switches like the following:
