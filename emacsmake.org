@@ -898,4 +898,8 @@ There's also no config file, and one could be used to help clean the script up. 
 would still be needed.
 
 * Bits to add
-Nothing to add yet.
+I have to sew in some infrastructure for toggling native compilation without going the route of
+environment variables. I don't have it at the moment, and the way I set up main() assumes that I'm
+only using one switch and everything else is signalled as an error.
+
+Nothing else to add yet.
