@@ -43,6 +43,8 @@ EMACSCOMPILEHOME=${EMACSCOMPILEHOME:-"/h3/viking/src/c/hosts/gnu/emacs"}
 EMACSHOME=${EMACSHOME:-"/usr/local"}
 # Default, but check the configMe functions further down. Can't feed this in from user's env.
 # Emacs-23 doesn't have most of these options
+# This is default for the moment, switch if needed via command line switches
+EMACSNATIVE="--without-native-compilation"
 EMACSCONFIGPARAMS=(
     "--with-modules"
     "--with-tree-sitter"
@@ -50,11 +52,9 @@ EMACSCONFIGPARAMS=(
     "--with-cairo"
     "--with-xwidgets"
     "--with-x-toolkit=gtk3" # for completeness's sake
-    "--prefix=${EMACSHOME}" )
+    "--prefix=${EMACSHOME}" ${EMACSNATIVE})
 # Default X toolkit if we don't change it with a -c{g2,l,m,n} option
 WMGR=gtk3
-# This is default for the moment, switch if needed via command line switches
-EMACSNATIVE="--without-native-compilation"
 # This gets used to run with-emacs.sh with custom directory
 EMACSCONFHOME="${HOME}/.emacs-playpen"
 EMACSRUNARGS=(
@@ -442,6 +442,7 @@ if [[ -z "${SANDBOX_LOCATION}" ]]; then
 fi
 unset SANDBOX_LOCATION
 
+# TODO: need a better switch parser.
 if [[ -n $2 ]]; then # In short, if 2 or more args
     echo "$0: Too many arguments, we only need one of the following"
     helpMe
