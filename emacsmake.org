@@ -747,7 +747,7 @@ However, I could have used short/long switches like the following:
 
 #+BEGIN_QUOTE bash -i
 # Need a getopts-style processor here, or I could simply roll my own. Quicker to roll.
-# args=$(getopt -n "$0" -o c:dDe:hmniru -l emacs:,config:,distclean,maintainerclean,help,make,native,install,run,uninstall -- "$@") || { usage; exit 1; }
+# args=$(getopt -n "$0" -o c:dDe:hmn:iru -l emacs:,config:,distclean,maintainerclean,help,make,native:,install,run,uninstall -- "$@") || { usage; exit 1; }
 
 # eval set -- "$args"
 # The while true won't work, as we need to run steps in order, not in the order the args are processed.
