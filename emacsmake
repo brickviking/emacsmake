@@ -71,7 +71,7 @@ EMACSCONFIGPARAMSGTK=(
     "--with-imagemagick"
     "--with-cairo"
     "--with-x-toolkit=gtk" # for completeness's sake
-    "--prefix=${EMACSHOME}"
+    "--prefix=${EMACSHOME}  ${EMACSNATIVE}"
 )
 EMACSCONFIGPARAMSGTK2=(
     "--with-modules"
@@ -79,7 +79,7 @@ EMACSCONFIGPARAMSGTK2=(
     "--with-imagemagick"
     "--with-cairo"
     "--with-x-toolkit=gtk2" # for completeness's sake
-    "--prefix=${EMACSHOME}"
+    "--prefix=${EMACSHOME}  ${EMACSNATIVE}"
 )
 EMACSCONFIGPARAMSGTK3=(
     "--with-modules"
@@ -88,26 +88,26 @@ EMACSCONFIGPARAMSGTK3=(
     "--with-cairo"
     "--with-xwidgets"
     "--with-x-toolkit=gtk3" # for completeness's sake
-    "--prefix=${EMACSHOME}")
+    "--prefix=${EMACSHOME}  ${EMACSNATIVE}")
 EMACSCONFIGPARAMSLUCID=(
     "--with-modules"
     "--with-tree-sitter"
     "--with-imagemagick"
     "--with-cairo"
     "--with-x-toolkit=lucid"
-    "--prefix=${EMACSHOME}")
+    "--prefix=${EMACSHOME}  ${EMACSNATIVE}")
 EMACSCONFIGPARAMSMOTIF=(
     "--with-modules"
     "--with-tree-sitter"
     "--with-imagemagick"
     "--with-cairo"
     "--with-x-toolkit=motif"
-    "--prefix=${EMACSHOME}")
+    "--prefix=${EMACSHOME}  ${EMACSNATIVE}")
 EMACSCONFIGPARAMSNOX=( # You know I just had to do it
     "--with-modules"
     "--with-tree-sitter"
     "--without-x"
-    "--prefix=${EMACSHOME}")
+    "--prefix=${EMACSHOME}  ${EMACSNATIVE}")
 
 helpMe() {
     echo "$0: Emacs recompiler script"
