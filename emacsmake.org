@@ -648,7 +648,7 @@ copyMe() {
         EMACSTGT="$(readlink ${EMACSHOME}/bin/emacs)"
         echo "Linking ${EMACSHOME}/bin/${EMACSTGT} to ${EMACSHOME}/bin/${EMACSTGT}-${WMGR}"
         # There should perhaps be a sudo/doas here
-        sudo cp -iv ${EMACSHOME}/bin/${EMACSTGT} ${EMACSHOME}/bin/${EMACSTGT}-${WMGR}
+        sudo cp -v ${EMACSHOME}/bin/${EMACSTGT} ${EMACSHOME}/bin/${EMACSTGT}-${WMGR}
     else
         echo "$0: we couldn't find an Emacs at ${EMACSHOME} or ${WMGR} isn't set."
     fi
