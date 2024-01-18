@@ -54,5 +54,7 @@ affect the running of with-emacs.sh.
 At this stage, I haven't got the foggiest idea what else I need, though I've already simplified this
 by removing the whole "execute Emacs" stage, leaving that up to the with-emacs.sh script.
 
-The usual applies to anyone who wants to report bugs, issues or even suggestions, check out the
+The usual applies to anyone who wants to report bugs, issues or even suggestions with emacsmake, check out the
 issues section of this project.
+
+If you want to report a bug regarding Emacs itself, they have a mailing list hosted at =https://lists.gnu.org/emacs-devel/= and the project page is hosted at =http://savannah.gnu.org/projects/emacs/=
