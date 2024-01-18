@@ -139,6 +139,9 @@ earlier versions (13-18.58) predated the autoconf software suite which wasn't re
 #       configure phase. Still doesn't work for much earlier than 23 - 18.59 has no configure.
 #+END_SRC
 
+** VC ChangeLog
+
+
 ** Parameters
   :PROPERTIES:
   :CUSTOM_ID: parameters
