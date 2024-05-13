@@ -258,7 +258,8 @@ EMACSCONFIGPARAMSGTK3=(
     "--with-cairo"
     "--with-xwidgets"
     "--with-x-toolkit=gtk3" # for completeness's sake
-    "--prefix=${EMACSHOME}  ${EMACSNATIVE}")
+    "--prefix=${EMACSHOME}  ${EMACSNATIVE}"
+)
 EMACSCONFIGPARAMSLUCID=(
     "--with-modules"
     "--with-tree-sitter"
