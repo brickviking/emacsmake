@@ -220,10 +220,15 @@ EMACSRUNARGS=(
 ** Functions
 *** Help function
 
-The boilerplate help just in case I forgot what switches I coded. Uses UNIX syntax (-x) not Microsoft (/x). There's also a slight bug with EMACSCONFIGPARAMS
-if I decide I want to show non-default window toolkits. So far I've added
-GTK, GTK2, GTK3 (the default), Lucid and Motif toolkits. I haven't bothered
-with -nw, as I'm always on a desktop with an Xorg server running.
+The boilerplate help just in case I forgot what switches I coded. Uses UNIX syntax (-x) and not
+Microsoft (/x). There's also a slight bug with EMACSCONFIGPARAMS if I decide I want to show
+non-default window toolkits. So far I've added GTK, GTK2, GTK3 (the default), Lucid and Motif
+toolkits. I haven't bothered with -nw, as I'm always on a desktop with an Xorg server running.
+
+One other issue is that I've defaulted to having treesitter and ImageMagick, which isn't necessarily
+true for most other machines this might be executed on. There will eventually be a way to set up
+what libs you want, but that'll rely on a whole lot of booleans up near the top of the file which
+can be read in from disk, or put up near the top of the emacsmake script instead.
 
 #+BEGIN_SRC bash -i
 ###########
