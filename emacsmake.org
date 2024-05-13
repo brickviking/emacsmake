@@ -278,7 +278,8 @@ EMACSCONFIGPARAMSNOX=( # You know I just had to do it
     "--with-modules"
     "--with-tree-sitter"
     "--without-x"
-    "--prefix=${EMACSHOME}  ${EMACSNATIVE}")
+    "--prefix=${EMACSHOME}  ${EMACSNATIVE}"
+)
 
 helpMe() {
     echo "$0: Emacs recompiler script"
