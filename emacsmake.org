@@ -223,6 +223,7 @@ EMACSRUNARGS=(
 The boilerplate help just in case I forgot what switches I coded. Uses UNIX syntax (-x) and not
 Microsoft (/x). There's also a slight bug with EMACSCONFIGPARAMS if I decide I want to show
 non-default window toolkits. So far I've added GTK, GTK2, GTK3 (the default), Lucid and Motif
+toolkits. It is very difficult if not impossible to compile Emacs so that it supports multiple
 toolkits.
 
 One other issue is that I've defaulted to having treesitter and ImageMagick, which isn't necessarily
