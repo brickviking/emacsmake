@@ -297,6 +297,7 @@ helpMe() {
     echo "  -e    run every step; distclean, configure, make, install, run"
     echo "        default Emacs binary location is ${EMACSHOME}"
     echo "  -c    run ./configure with params ${EMACSCONFIGPARAMS[@]}"
+    echo "  -ch  run ./configure to extract all its help"
     echo "  -cg   run ./configure with params ${EMACSCONFIGPARAMSGTK[@]}"
     echo "  -cg2  run ./configure with params ${EMACSCONFIGPARAMSGTK2[@]}"
     echo "  -cl   run ./configure with params ${EMACSCONFIGPARAMSLUCID[@]}"
@@ -407,7 +408,25 @@ should be by the time we get here. Heck, if we weren't, something went badly wro
 I learned to specify the location of the configure directly, so I don't accidentally pick up on a
 preinstalled configure somewhere in the ${PATH}.
 
+I'm also adding a shortcut to the --help from configure, though you really could get this for
+yourself by running it by hand. It's still up to you to pipe it to a pager, especially if you're
+on a 24/25-line screen.
+
 #+BEGIN_SRC bash -i
+# This extracts the help from ./configure --help
+configHelpMe() {
+ if [[ -f ./configure ]]; then
+        ./configure --help
+    else
+        ./autogen.sh # fails if autotools not installed
+        if [[ ! -f configure ]]; then
+            echo "Failed to create configure, do you have autotools installed?"
+        else
+            ./configure --help
+        fi
+    fi
+}
+
 # Runs configure phase, runs autogen if configure isn't here already
 # This just does GTK3 unless EMACSCONFIGPARAMS[] is changed from a calling function
 configMe() {
@@ -795,6 +814,9 @@ if [[ -n $2 ]]; then # In short, if 2 or more args
 elif [[ -n $1 ]]; then
     case $1 in 
         "-h"|"--help"|"-?") helpMe ;;
+        "-ch"|"--confighelp")  pushd "${EMACSCOMPILEHOME}" >/dev/null
+              configHelpMe
+              popd >/dev/null ;;
         "-d") pushd "${EMACSCOMPILEHOME}" >/dev/null
               cleanMe
               popd >/dev/null ;;
