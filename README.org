@@ -24,7 +24,7 @@ compile.
 
 ** Compile requirements
 Because you're compiling Emacs, you can choose which libraries to compile Emacs with; adjust the
-=EMACSCONFIGPARAMS= array for this. You might want to check the output of =./configure --help= from
+=EMACSCONFIGPARAMS= array for this. You might want to check the output of =emacsmake -ch= from
 within the source directory to see what parameters are supported.
 
 This will include choosing the place to put the compiled version of Emacs, adjust =EMACSHOME=. Note
