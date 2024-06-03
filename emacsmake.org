@@ -134,6 +134,7 @@ earlier versions (13-18.58) predated the autoconf software suite which wasn't re
 # v0.16 Added an unPatch switch (-pu) to reverse patches already applied with -p.
 # v0.17 Some more tweaks, adding --without-native-compilation re: emacs-devel posts.
 # v0.18 Corrected emacs to Emacs where it makes sense to.
+# v0.19 Added -ch, to call configure --help. I also made some whitespace changes.
 #
 # TODO: rework for versions of Emacs earlier than 28.0.50, as there's no makefile until the
 #       configure phase. Still doesn't work for much earlier than 23 - 18.59 has no configure.
@@ -207,14 +208,17 @@ EMACSCONFIGPARAMS=(
     "--with-cairo"
     "--with-xwidgets"
     "--with-x-toolkit=gtk3" # for completeness's sake
-    "--prefix=${EMACSHOME}" ${EMACSNATIVE})
+    "--prefix=${EMACSHOME}"
+    "${EMACSNATIVE}"
+)
 # Default X toolkit if we don't change it with a -c{g2,l,m,n} option
 WMGR=gtk3
 # This gets used to run with-emacs.sh with custom directory
 EMACSCONFHOME="${HOME}/.emacs-playpen"
 EMACSRUNARGS=(
     "-d"
-    "${EMACSCONFHOME}" )
+    "${EMACSCONFHOME}"
+)
 #+END_SRC
 
 ** Functions
@@ -242,7 +246,8 @@ EMACSCONFIGPARAMSGTK=(
     "--with-imagemagick"
     "--with-cairo"
     "--with-x-toolkit=gtk" # for completeness's sake
-    "--prefix=${EMACSHOME}  ${EMACSNATIVE}"
+    "--prefix=${EMACSHOME}"
+    "${EMACSNATIVE}"
 )
 EMACSCONFIGPARAMSGTK2=(
     "--with-modules"
@@ -250,7 +255,8 @@ EMACSCONFIGPARAMSGTK2=(
     "--with-imagemagick"
     "--with-cairo"
     "--with-x-toolkit=gtk2" # for completeness's sake
-    "--prefix=${EMACSHOME}  ${EMACSNATIVE}"
+    "--prefix=${EMACSHOME}"
+    "${EMACSNATIVE}"
 )
 EMACSCONFIGPARAMSGTK3=(
     "--with-modules"
@@ -259,7 +265,8 @@ EMACSCONFIGPARAMSGTK3=(
     "--with-cairo"
     "--with-xwidgets"
     "--with-x-toolkit=gtk3" # for completeness's sake
-    "--prefix=${EMACSHOME}  ${EMACSNATIVE}"
+    "--prefix=${EMACSHOME}"
+    "${EMACSNATIVE}"
 )
 EMACSCONFIGPARAMSLUCID=(
     "--with-modules"
@@ -267,19 +274,24 @@ EMACSCONFIGPARAMSLUCID=(
     "--with-imagemagick"
     "--with-cairo"
     "--with-x-toolkit=lucid"
-    "--prefix=${EMACSHOME}  ${EMACSNATIVE}")
+    "--prefix=${EMACSHOME}"
+    "${EMACSNATIVE}"
+)
 EMACSCONFIGPARAMSMOTIF=(
     "--with-modules"
     "--with-tree-sitter"
     "--with-imagemagick"
     "--with-cairo"
     "--with-x-toolkit=motif"
-    "--prefix=${EMACSHOME}  ${EMACSNATIVE}")
+    "--prefix=${EMACSHOME}"
+    "${EMACSNATIVE}"
+)
 EMACSCONFIGPARAMSNOX=( # You know I just had to do it
     "--with-modules"
     "--with-tree-sitter"
     "--without-x"
-    "--prefix=${EMACSHOME}  ${EMACSNATIVE}"
+    "--prefix=${EMACSHOME}"
+    "${EMACSNATIVE}"
 )
 
 helpMe() {
@@ -444,26 +456,30 @@ configMe() {
 
 # Should support the GTK1 crowd but here, just grabs gtk3
 configMeGtk() {
-EMACSCONFIGPARAMS=(
-    "--with-modules"
-    "--with-tree-sitter"
-    "--with-imagemagick"
-    "--with-cairo"
-    "--with-x-toolkit=gtk"
-    "--prefix=${EMACSHOME}" "${EMACSNATIVE}")
+    EMACSCONFIGPARAMS=(
+        "--with-modules"
+        "--with-tree-sitter"
+        "--with-imagemagick"
+        "--with-cairo"
+        "--with-x-toolkit=gtk"
+        "--prefix=${EMACSHOME}"
+        "${EMACSNATIVE}"
+    )
     WMGR=gtk # (might be gtk3)
     configMe
 }
 
 # Should support the GTK2 crowd too
 configMeGtk2() {
-EMACSCONFIGPARAMS=(
-    "--with-modules"
-    "--with-tree-sitter"
-    "--with-imagemagick"
-    "--with-cairo"
-    "--with-x-toolkit=gtk2"
-    "--prefix=${EMACSHOME}" "${EMACSNATIVE}")
+    EMACSCONFIGPARAMS=(
+        "--with-modules"
+        "--with-tree-sitter"
+        "--with-imagemagick"
+        "--with-cairo"
+        "--with-x-toolkit=gtk2"
+        "--prefix=${EMACSHOME}"
+        "${EMACSNATIVE}"
+    )
     WMGR=gtk2
     configMe
 }
@@ -471,51 +487,59 @@ EMACSCONFIGPARAMS=(
 
 # Default unless something else chosen, simply call configMe
 configMeGtk3() {
-EMACSCONFIGPARAMS=(
-    "--with-modules"
-    "--with-tree-sitter"
-    "--with-imagemagick"
-    "--with-cairo"
-    "--with-xwidgets"
-    "--with-x-toolkit=gtk3" # for completeness's sake
-    "--prefix=${EMACSHOME}"  "${EMACSNATIVE}")
+    EMACSCONFIGPARAMS=(
+        "--with-modules"
+        "--with-tree-sitter"
+        "--with-imagemagick"
+        "--with-cairo"
+        "--with-xwidgets"
+        "--with-x-toolkit=gtk3" # for completeness's sake
+        "--prefix=${EMACSHOME}"
+        "${EMACSNATIVE}"
+    )
     WMGR=gtk3
     configMe
 }
 
 # Choose this if you never installed gtk - crazy, huh?
 configMeLucid() {
-EMACSCONFIGPARAMS=(
-    "--with-modules"
-    "--with-tree-sitter"
-    "--with-imagemagick"
-    "--with-cairo"
-    "--with-x-toolkit=lucid"
-    "--prefix=${EMACSHOME}"  "${EMACSNATIVE}")
+    EMACSCONFIGPARAMS=(
+        "--with-modules"
+        "--with-tree-sitter"
+        "--with-imagemagick"
+        "--with-cairo"
+        "--with-x-toolkit=lucid"
+        "--prefix=${EMACSHOME}"
+        "${EMACSNATIVE}"
+    )
     WMGR=lucid
     configMe
 }
 
 # Choose this if you actually have a Motif or LessTif
 configMeMotif() {
-EMACSCONFIGPARAMS=(
-    "--with-modules"
-    "--with-tree-sitter"
-    "--with-imagemagick"
-    "--with-cairo"
-    "--with-x-toolkit=motif"
-    "--prefix=${EMACSHOME}"  "${EMACSNATIVE}")
+    EMACSCONFIGPARAMS=(
+        "--with-modules"
+        "--with-tree-sitter"
+        "--with-imagemagick"
+        "--with-cairo"
+        "--with-x-toolkit=motif"
+        "--prefix=${EMACSHOME}"
+        "${EMACSNATIVE}"
+    )
     WMGR=motif
     configMe
 }
 
 # Choose this if you don't want an Emacs with X (creates emacs-nox)
 configMeNoX() {
-EMACSCONFIGPARAMS=(
-    "--with-modules"
-    "--with-tree-sitter"
-    "--without-x"
-    "--prefix=${EMACSHOME}"  "${EMACSNATIVE}")
+    EMACSCONFIGPARAMS=(
+        "--with-modules"
+        "--with-tree-sitter"
+        "--without-x"
+        "--prefix=${EMACSHOME}"
+        "${EMACSNATIVE}"
+    )
     WMGR=nox
     configMe
 }
