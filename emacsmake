@@ -97,6 +97,15 @@ EMACSCONFIGPARAMSGTK3=(
     "--prefix=${EMACSHOME}"
     "${EMACSNATIVE}"
 )
+#EMACSCONFIGPARAMSATHENA=(
+#    "--with-modules"
+#    "--with-tree-sitter"
+#    "--with-imagemagick"
+#    "--with-cairo"
+#    "--with-x-toolkit=athena"
+#    "--prefix=${EMACSHOME}"
+#    "${EMACSNATIVE}"
+#)
 EMACSCONFIGPARAMSLUCID=(
     "--with-modules"
     "--with-tree-sitter"
@@ -141,6 +150,7 @@ helpMe() {
     echo "  -ch  run ./configure to extract all its help"
     echo "  -cg   run ./configure with params ${EMACSCONFIGPARAMSGTK[@]}"
     echo "  -cg2  run ./configure with params ${EMACSCONFIGPARAMSGTK2[@]}"
+#    echo "  -ca   run ./configure with params ${EMACSCONFIGPARAMSATHENA[@]}"
     echo "  -cl   run ./configure with params ${EMACSCONFIGPARAMSLUCID[@]}"
     echo "  -cm   run ./configure with params ${EMACSCONFIGPARAMSMOTIF[@]}"
     echo "  -cn   run ./configure with params ${EMACSCONFIGPARAMSNOX[@]}"
@@ -293,6 +303,22 @@ configMeLucid() {
     configMe
 }
 
+# Choose this if you have athena and maybe not lucid
+# commented out while I check feasibility.
+#configMeAthena() {
+#    EMACSCONFIGPARAMS=(
+#        "--with-modules"
+#        "--with-tree-sitter"
+#        "--with-imagemagick"
+#        "--with-cairo"
+#        "--with-x-toolkit=athena"
+#        "--prefix=${EMACSHOME}"
+#        "${EMACSNATIVE}"
+#    )
+#    WMGR=athena
+#    configMe
+#}
+
 # Choose this if you actually have a Motif or LessTif
 configMeMotif() {
     EMACSCONFIGPARAMS=(
@@ -348,6 +374,10 @@ makeAllToolkits() {
     configMeMotif
     makeMe
     installMe
+    # athena - commented out until we confirm it works.
+#    configMeAthena
+#    makeMe
+#    installMe
     # lucid
     configMeLucid
     makeMe
@@ -390,6 +420,7 @@ whatMadeMe() {
                 "--with-x-toolkit=gtk") WMGR=gtk ;; # Works out to be gtk3 here
                 "--with-x-toolkit=gtk2") WMGR=gtk2 ;;
                 "--with-x-toolkit=gtk3") WMGR=gtk3 ;;
+#                "--with-x-toolkit=athena") WMGR=athena ;;
                 "--with-x-toolkit=lucid") WMGR=lucid ;;
                 "--with-x-toolkit=motif") WMGR=motif ;;
                 "--without-x") WMGR=nox ;;
