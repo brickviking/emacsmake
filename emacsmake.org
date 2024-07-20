@@ -573,6 +573,9 @@ configMeNoX() {
 #+END_SRC
 
 *** Make commands
+  :PROPERTIES:
+  :CUSTOM_ID: make-commands
+  :END:
 
 The only note here is that we force a full recompile so we don't accidentally install stale .elc
 files from previous compiles.
