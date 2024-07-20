@@ -44,6 +44,11 @@ EMACSCOMPILEHOME=${EMACSCOMPILEHOME:-"/h3/viking/src/c/hosts/gnu/emacs"}
 EMACSHOME=${EMACSHOME:-"/usr/local"}
 # Default, but check the configMe functions further down. Can't feed this in from user's env.
 # Emacs-23 doesn't have most of these options
+
+# output from configure for  --with-native-compilation[=TYPE]:
+# 'yes' (or empty): enable it and compile natively preloaded Lisp files
+# 'no': disable it (alternatively, use --without-native-compilation)
+# 'aot':  compile all Lisp files in the tree natively ahead of time (slow)
 # This is default for the moment, switch if needed via command line switches
 EMACSNATIVE="--without-native-compilation"
 EMACSCONFIGPARAMS=(
