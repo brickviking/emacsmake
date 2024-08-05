@@ -369,8 +369,12 @@ gitMe() {
 #+END_SRC
 
 *** Patching
-I have a very small patch in place at the moment for upyoursgrandma.patch, the other patch
-I'll leave out for the moment.
+These are for user-provided patches. Note that at the moment, these patches are applied in purely
+alphabetic order, and take no account of whether that's correct or not. If that's not desired, then
+send me some patches that use a list in patches/filesToReplace.
+
+I did have a very small patch in place for upyoursgrandma.patch, but I now only have one for some
+docs that didn't get updated when emacs-30 did.
 
 #+BEGIN_SRC bash -i
 # This can generally patch the source tree in the manner prescribed by the user.
