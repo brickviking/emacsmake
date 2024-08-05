@@ -10,7 +10,7 @@ This is a simple script to create Emacs from its source code. About the only thi
 this is a licence, I haven't come up with a usable licence yet.
 
 :CONTENTS:
-- [[#readme-in-org-format][Readme, in org format]]
+- [[#readme][Readme, in org format]]
 - [[#main-file][Main file]]
   - [[#header-and-changelog][Header and Changelog]]
   - [[#parameters][Parameters]]
@@ -18,16 +18,16 @@ this is a licence, I haven't come up with a usable licence yet.
     - [[#help-function][Help function]]
     - [[#update-source-tree-with-git][Update source tree with git]]
     - [[#patching][Patching]]
-    - [[#cleaning-scripts-distcleanmaintainer-clean][Cleaning scripts distclean/maintainer-clean]]
-    - [[#configure-emacs-for-compilation][Configure Emacs for compilation]]
+    - [[#cleaning][Cleaning scripts distclean/maintainer-clean]]
+    - [[#configure][Configure Emacs for compilation]]
     - [[#make-commands][Make commands]]
     - [[#installuninstall][Install/uninstall]]
-    - [[#running][Running]]
-    - [[#do-everything-section][Do-everything section]]
+    - [[#runningemacs][Running]]
+    - [[#doeverything][Do-everything section]]
   - [[#main][Main]]
 - [[#makefile][Makefile]]
 - [[#conclusions][Conclusions]]
-- [[#bits-to-add][Bits to add]]
+- [[#bitstoadd][Bits to add]]
 :END:
 
 
@@ -35,6 +35,7 @@ this is a licence, I haven't come up with a usable licence yet.
   :PROPERTIES:
   :header-args: org :tangle README.org
   :TOC:      :include all :depth 3
+  :CUSTOM_ID: readme
   :END:
 
 #+BEGIN_SRC org -i
@@ -103,6 +104,7 @@ If you want to report a bug regarding Emacs itself, they have a mailing list hos
 * Main file
     :PROPERTIES:
     :header-args: bash :tangle emacsmake :tangle-mode (identity #o755)
+    :CUSTOM_ID: main-file
     :END:
 
 ** Header and Changelog
@@ -227,7 +229,14 @@ EMACSRUNARGS=(
 #+END_SRC
 
 ** Functions
+  :PROPERTIES:
+  :CUSTOM_ID: functions
+  :END:
+
 *** Help function
+  :PROPERTIES:
+  :CUSTOM_ID: help-function
+  :END:
 
 The boilerplate help just in case I forgot what switches I coded. Uses UNIX syntax (-x) and not
 Microsoft (/x). There's also a slight bug with EMACSCONFIGPARAMS if I decide I want to show
@@ -344,6 +353,9 @@ helpMe() {
 #+END_SRC
 
 *** Update source tree with git
+  :PROPERTIES:
+  :CUSTOM_ID: update-source-tree-with-git
+  :END:
 
 I had seriously considered this, but I can't even guarantee I'll stick just with emacs-29, and
 I don't really know how to propagate that through the build scripts that depend on it, so I'm
@@ -369,6 +381,10 @@ gitMe() {
 #+END_SRC
 
 *** Patching
+  :PROPERTIES:
+  :CUSTOM_ID: patching
+  :END:
+
 These are for user-provided patches. Note that at the moment, these patches are applied in purely
 alphabetic order, and take no account of whether that's correct or not. If that's not desired, then
 send me some patches that use a list in patches/filesToReplace.
@@ -399,6 +415,9 @@ unPatchMe() {
 #+END_SRC
 
 *** Cleaning scripts distclean/maintainer-clean
+  :PROPERTIES:
+  :CUSTOM_ID: cleaning
+  :END:
 
 Distclean basically removes almost everything that didn't come with the source code, and
 maintainer-clean removes everything that was generated, leaving only the original code.  I'm not
@@ -430,7 +449,7 @@ cleanMeGood() {
 
 *** Configure Emacs for compilation
   :PROPERTIES:
-  :CUSTOM_ID: configure-emacs-for-compilation
+  :CUSTOM_ID: configure
   :END:
 
 It's pretty obvious what this does, though it does presume we're in the correct directory, which we
@@ -694,6 +713,9 @@ checkRunningEmacs() {
 }
 #+END_SRC
 *** Install/uninstall
+  :PROPERTIES:
+  :CUSTOM_ID: installuninstall
+  :END:
 
 This is a way to find out what I already compiled, if I compiled it. We start off with a default
 of gtk3 in WMGR, which only changes if we find something specific. We don't really have to cut
@@ -787,6 +809,9 @@ uninstallMe() {
 #+END_SRC
 
 *** Running
+  :PROPERTIES:
+  :CUSTOM_ID: runningemacs
+  :END:
 
 This runs the just-installed Emacs from a config in sandbox, so I don't hose the main config.  It
 does depend on an ancillary script called with-emacs.sh, which came from another place.  It's not
@@ -808,6 +833,9 @@ runMe() {
 #+END_SRC
 
 *** Do-everything section
+  :PROPERTIES:
+  :CUSTOM_ID: doeverything
+  :END:
 
 To call this, we just string all the sections together in a sequence. I've made no attempt to
 support multiple stages, and have explicitly disallowed this by only allowing one arg down further
@@ -831,6 +859,9 @@ execMe() {
 #+END_SRC
 
 ** Main
+  :PROPERTIES:
+  :CUSTOM_ID: main
+  :END:
 
 This handles the arg matching, checks if we have a with-emacs.sh, and notifies us if we don't.
 It's assumed we know how to get this from Github if we don't have it, perhaps an incorrect
@@ -965,6 +996,7 @@ echo "Ending... bye"
 * Makefile
     :PROPERTIES:
     :header-args: makefile :tangle Makefile
+    :CUSTOM_ID: makefile
     :END:
 
 This is a dirt-simple Makefile that will hopefully install emacsmake into a system-wide location.
@@ -994,6 +1026,10 @@ uninstall:
 #+END_SRC
 
 * Conclusions
+  :PROPERTIES:
+  :CUSTOM_ID: conclusions
+  :END:
+
 This was originally a fairly clean script, which would have been easy enough to understand without
 the extra descriptions. There's not a lot to this one, but I felt I needed to add a little
 clarification at certain spots. I've also tried to make it more "portable" between Emacs versions.
@@ -1002,6 +1038,10 @@ There's also no config file, and one could be used to help clean the script up. 
 would still be needed.
 
 * Bits to add
+  :PROPERTIES:
+  :CUSTOM_ID: bitstoadd
+  :END:
+
 I have to sew in some infrastructure for toggling native compilation without going the route of
 environment variables. I don't have it at the moment, and the way I set up main() assumes that I'm
 only using one switch and everything else is signalled as an error.
