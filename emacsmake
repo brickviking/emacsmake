@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # v0.1 Initial cut, should be mostly complete.
 # v0.2 Changes to account for mistakes I made.

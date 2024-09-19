@@ -113,7 +113,7 @@ versions earlier than 28.0.50. Heck, 18.x (and earlier beasts) were done on far 
 earlier versions (13-18.58) predated the autoconf software suite which wasn't released until 1991.
 
 #+BEGIN_SRC bash
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # v0.1 Initial cut, should be mostly complete.
 # v0.2 Changes to account for mistakes I made.
