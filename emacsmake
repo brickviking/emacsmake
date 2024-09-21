@@ -222,6 +222,7 @@ configHelpMe() {
  if [[ -f ./configure ]]; then
         ./configure --help
     else
+        echo "No configure present - running autotools"
         ./autogen.sh # fails if autotools not installed
         if [[ ! -f configure ]]; then
             echo "Failed to create configure, do you have autotools installed?"
